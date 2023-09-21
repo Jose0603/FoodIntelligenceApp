@@ -1,0 +1,41 @@
+{
+  "expo": {
+    "name": "Fooda",
+    "slug": "Fooda",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/images/splash-icon1.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyD9dz07KGRRgDjIyuWlNjnnnjegX1SungnniZ4"
+        }
+      },
+      "package": "com.thoms90.Fooda"
+    },
+    "web": {
+      "favicon": "./assets/images/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "1f8fe7e1-b822-4483-99f4-5d7ec1261e55"
+      }
+    }
+  }
+}
