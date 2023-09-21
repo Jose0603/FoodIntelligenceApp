@@ -48,8 +48,6 @@ const Onboarding1 = ({ navigation }) => {
                         marginHorizontal: 22,
                     }}
                 >
-
-
                     <Image
                         source={images.onboarding1}
                         resizeMode="contain"
@@ -90,17 +88,19 @@ const Onboarding1 = ({ navigation }) => {
                             textAlign: 'center',
                         }}
                     >
-                        Get all your loved foods in one once place,
-                        you just place the orer we do the rest
+                        Get all your loved foods in one once place, you just
+                        place the orer we do the rest
                     </Text>
 
                     <View
                         style={{
                             marginBottom: 20,
-                            marginTop: 8
+                            marginTop: 8,
                         }}
                     >
-                        {progress < 1 && <DotsView progress={progress} numDots={4} />}
+                        {progress < 1 && (
+                            <DotsView progress={progress} numDots={4} />
+                        )}
                     </View>
 
                     <View
@@ -120,7 +120,7 @@ const Onboarding1 = ({ navigation }) => {
                         />
                         <Button
                             title="Skip"
-                            onPress={() => navigation.navigate('Login')}
+                            onPress={() => navigation.navigate('Main')}
                             style={{
                                 width: SIZES.width - 44,
                                 marginBottom: SIZES.padding,

@@ -48,8 +48,6 @@ const Onboarding3 = ({ navigation }) => {
                         marginHorizontal: 22,
                     }}
                 >
-
-
                     <Image
                         source={images.onboarding3}
                         resizeMode="contain"
@@ -90,17 +88,19 @@ const Onboarding3 = ({ navigation }) => {
                             textAlign: 'center',
                         }}
                     >
-                        Order from your chosen chef.
-                        You just place the order, we do the rest.
+                        Order from your chosen chef. You just place the order,
+                        we do the rest.
                     </Text>
 
                     <View
                         style={{
                             marginBottom: 20,
-                            marginTop: 20
+                            marginTop: 20,
                         }}
                     >
-                        {progress < 1 && <DotsView progress={progress} numDots={4} />}
+                        {progress < 1 && (
+                            <DotsView progress={progress} numDots={4} />
+                        )}
                     </View>
 
                     <View
@@ -112,7 +112,7 @@ const Onboarding3 = ({ navigation }) => {
                         <Button
                             title="Next"
                             filled
-                            onPress={() => navigation.navigate('Onboarding2')}
+                            onPress={() => navigation.navigate('Onboarding4')}
                             style={{
                                 width: SIZES.width - 44,
                                 marginBottom: SIZES.padding,
@@ -120,7 +120,7 @@ const Onboarding3 = ({ navigation }) => {
                         />
                         <Button
                             title="Skip"
-                            onPress={() => navigation.navigate('Login')}
+                            onPress={() => navigation.navigate('Main')}
                             style={{
                                 width: SIZES.width - 44,
                                 marginBottom: SIZES.padding,

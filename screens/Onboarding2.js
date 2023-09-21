@@ -39,7 +39,7 @@ const Onboarding2 = ({ navigation }) => {
                 backgroundColor: COLORS.white,
             }}
         >
-          <StatusBar style="light" />
+            <StatusBar style="light" />
             <PageContainer>
                 <View
                     style={{
@@ -48,8 +48,6 @@ const Onboarding2 = ({ navigation }) => {
                         marginHorizontal: 22,
                     }}
                 >
-                   
-
                     <Image
                         source={images.onboarding2}
                         resizeMode="contain"
@@ -59,7 +57,7 @@ const Onboarding2 = ({ navigation }) => {
                         }}
                     />
 
-<View
+                    <View
                         style={{
                             marginVertical: 18,
                             alignItems: 'center',
@@ -90,17 +88,19 @@ const Onboarding2 = ({ navigation }) => {
                             textAlign: 'center',
                         }}
                     >
-                        Get all your loved restaurants in one place,
-you just place the order, we do the rest.
+                        Get all your loved restaurants in one place, you just
+                        place the order, we do the rest.
                     </Text>
 
                     <View
                         style={{
                             marginBottom: 20,
-                            marginTop: 8
+                            marginTop: 8,
                         }}
                     >
-                        {progress < 1 && <DotsView progress={progress} numDots={4} />}
+                        {progress < 1 && (
+                            <DotsView progress={progress} numDots={4} />
+                        )}
                     </View>
 
                     <View
@@ -112,7 +112,7 @@ you just place the order, we do the rest.
                         <Button
                             title="Next"
                             filled
-                            onPress={() => navigation.navigate('Onboarding2')}
+                            onPress={() => navigation.navigate('Onboarding3')}
                             style={{
                                 width: SIZES.width - 44,
                                 marginBottom: SIZES.padding,
@@ -120,7 +120,7 @@ you just place the order, we do the rest.
                         />
                         <Button
                             title="Skip"
-                            onPress={() => navigation.navigate('Login')}
+                            onPress={() => navigation.navigate('Main')}
                             style={{
                                 width: SIZES.width - 44,
                                 marginBottom: SIZES.padding,

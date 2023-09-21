@@ -48,8 +48,6 @@ const Onboarding4 = ({ navigation }) => {
                         marginHorizontal: 22,
                     }}
                 >
-
-
                     <Image
                         source={images.onboarding4}
                         resizeMode="contain"
@@ -90,17 +88,19 @@ const Onboarding4 = ({ navigation }) => {
                             textAlign: 'center',
                         }}
                     >
-                        Order from your chosen chef with no delivery fee.
-                        You just place the order, we do the rest.
+                        Order from your chosen chef with no delivery fee. You
+                        just place the order, we do the rest.
                     </Text>
 
                     <View
                         style={{
                             marginBottom: 20,
-                            marginTop: 20
+                            marginTop: 20,
                         }}
                     >
-                        {progress < 1 && <DotsView progress={progress} numDots={4} />}
+                        {progress < 1 && (
+                            <DotsView progress={progress} numDots={4} />
+                        )}
                     </View>
 
                     <View
@@ -110,22 +110,12 @@ const Onboarding4 = ({ navigation }) => {
                         }}
                     >
                         <Button
-                            title="Next"
+                            title="Main"
                             filled
-                            onPress={() => navigation.navigate('Login')}
+                            onPress={() => navigation.navigate('Main')}
                             style={{
                                 width: SIZES.width - 44,
                                 marginBottom: SIZES.padding,
-                            }}
-                        />
-                        <Button
-                            title="Skip"
-                            onPress={() => navigation.navigate('Login')}
-                            style={{
-                                width: SIZES.width - 44,
-                                marginBottom: SIZES.padding,
-                                backgroundColor: 'transparent',
-                                borderColor: COLORS.primary,
                             }}
                         />
                     </View>

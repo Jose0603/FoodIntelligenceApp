@@ -11,12 +11,15 @@ import { validateInput } from '../utils/actions/formActions'
 import { reducer } from '../utils/reducers/formReducers'
 import { commonStyles } from '../styles/CommonStyles'
 import { StatusBar } from 'expo-status-bar'
-import { user_login } from '../api/user_api'
+import { useContext } from 'react'
+import { AuthContext } from '../src/context/AuthContext'
 
-const isTestMode = false
+const isTestMode = true
 
 const initialState = {
     inputValues: {
+        email: isTestMode ? 'Jose0603' : '',
+        password: isTestMode ? 'Test1234*' : '',
         email: '',
         password: '',
     },
@@ -27,11 +30,13 @@ const initialState = {
     formIsValid: false,
 }
 
-const Login = ({ navigation }) => {
+const LoginScreen = ({ navigation }) => {
     const [isChecked, setChecked] = useState(false)
     const [error, setError] = useState()
     const [isLoading, setIsLoading] = useState(false)
     const [formState, dispatchFormState] = useReducer(reducer, initialState)
+
+    const { login } = useContext(AuthContext)
 
     const inputChangedHandler = useCallback(
         (inputId, inputValue) => {
@@ -47,12 +52,6 @@ const Login = ({ navigation }) => {
         }
     }, [error])
 
-    // const handleLogin = () => {
-    //     user_login({
-    //         username: formState.inputValidities['email'],
-    //         password: formState.inputValidities['password'],
-    //     })
-    // }
     // implementing facebook authentication
     const facebookAuthHandler = () => {
         return null
@@ -86,7 +85,7 @@ const Login = ({ navigation }) => {
                     id="email"
                     onInputChanged={inputChangedHandler}
                     errorText={formState.inputValidities['email']}
-                    placeholder="example@gmail.com"
+                    placeholder=""
                     placeholderTextColor={COLORS.black}
                     keyboardType="email-address"
                 />
@@ -96,7 +95,7 @@ const Login = ({ navigation }) => {
                     errorText={formState.inputValidities['password']}
                     autoCapitalize="none"
                     id="password"
-                    placeholder="*************"
+                    placeholder=""
                     placeholderTextColor={COLORS.black}
                     secureTextEntry={true}
                 />
@@ -126,7 +125,12 @@ const Login = ({ navigation }) => {
                     title="LOG IN"
                     isLoading={isLoading}
                     filled
-                    onPress={() => navigation.navigate('LocationAccess')}
+                    onPress={() =>
+                        login(
+                            formState.inputValues['email'],
+                            formState.inputValues['password']
+                        )
+                    }
                     style={commonStyles.btn}
                 />
                 <View style={commonStyles.center}>
@@ -188,4 +192,4 @@ const Login = ({ navigation }) => {
     )
 }
 
-export default Login
+export default LoginScreen

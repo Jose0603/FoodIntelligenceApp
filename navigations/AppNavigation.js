@@ -1,16 +1,17 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import React, { useState, useEffect } from 'react'
-import { Onboarding1, 
-    Onboarding2, 
-    Onboarding3, 
-    Signup, 
+import {
+    Onboarding1,
+    Onboarding2,
+    Onboarding3,
+    Signup,
     Verification,
-    Login, 
-    StartUpScreen, 
-    ForgotPassword, 
-    ResetPassword, 
-    Onboarding4 ,
+    Login,
+    StartUpScreen,
+    ForgotPassword,
+    ResetPassword,
+    Onboarding4,
     LocationAccess,
     HomeV1,
     FoodDetailsV1,
@@ -32,7 +33,7 @@ import { Onboarding1,
     Address,
     AddNewAddress,
     Call,
-    TrackingOrderV2
+    TrackingOrderV2,
 } from '../screens'
 import { NavigationContainer } from '@react-navigation/native'
 import BottomTabNavigation from './BottomTabNavigation'
@@ -69,11 +70,7 @@ const AppNavigation = () => {
 
     return (
         <NavigationContainer>
-            <Stack.Navigator
-                initialRouteName={
-                    isFirstLaunch ? 'Onboarding1' : 'Login'
-                }
-            >
+            <Stack.Navigator initialRouteName={'Onboarding1'}>
                 <Stack.Screen
                     name="Onboarding1"
                     component={Onboarding1}
@@ -96,13 +93,13 @@ const AppNavigation = () => {
                     }}
                 />
                 <Stack.Screen
-                  name="Onboarding4"
-                  component={Onboarding4}
-                  options={{
-                    headerShown: false,
-                  }}
+                    name="Onboarding4"
+                    component={Onboarding4}
+                    options={{
+                        headerShown: false,
+                    }}
                 />
-                <Stack.Screen
+                {/*<Stack.Screen
                     name="Signup"
                     component={Signup}
                     options={{
@@ -138,161 +135,161 @@ const AppNavigation = () => {
                     options={{
                         headerShown: false,
                     }}
+                /> */}
+                <Stack.Screen
+                    name="Verification"
+                    component={Verification}
+                    options={{
+                        headerShown: false,
+                    }}
                 />
                 <Stack.Screen
-                  name="Verification"
-                  component={Verification}
-                  options={{
-                    headerShown: false,
-                  }}
+                    name="LocationAccess"
+                    component={LocationAccess}
+                    options={{
+                        headerShown: false,
+                    }}
                 />
                 <Stack.Screen
-                  name="LocationAccess"
-                  component={LocationAccess}
-                  options={{
-                    headerShown: false
-                  }}
+                    name="HomeV1"
+                    component={HomeV1}
+                    options={{
+                        headerShown: false,
+                    }}
                 />
                 <Stack.Screen
-                  name="HomeV1"
-                  component={HomeV1}
-                  options={{
-                    headerShown: false
-                  }}
+                    name="Main"
+                    component={BottomTabNavigation}
+                    options={{
+                        headerShown: false,
+                    }}
                 />
                 <Stack.Screen
-                  name="Main"
-                  component={BottomTabNavigation}
-                  options={{
-                    headerShown: false
-                  }}
+                    name="DrawerNavigation"
+                    component={DrawerNavigation}
+                    options={{
+                        headerShown: false,
+                    }}
                 />
                 <Stack.Screen
-                  name="DrawerNavigation"
-                  component={DrawerNavigation}
-                  options={{
-                    headerShown: false
-                  }}
+                    name="FoodByKeywords"
+                    component={FoodByKeywords}
+                    options={{
+                        headerShown: false,
+                    }}
                 />
                 <Stack.Screen
-                  name="FoodByKeywords"
-                  component={FoodByKeywords}
-                  options={{
-                    headerShown: false
-                  }}
+                    name="FoodDetails"
+                    component={FoodDetailsV1}
+                    options={{
+                        headerShown: false,
+                    }}
                 />
                 <Stack.Screen
-                  name="FoodDetails"
-                  component={FoodDetailsV1}
-                  options={{
-                    headerShown: false
-                  }}
-                />
-                <Stack.Screen
-                  name="RestaurantView"
-                  component={RestaurantView1}
-                  options={{
-                    headerShown: false
-                  }}
+                    name="RestaurantView"
+                    component={RestaurantView1}
+                    options={{
+                        headerShown: false,
+                    }}
                 />
 
                 <Stack.Screen
-                  name="Cart"
-                  component={Cart}
-                  options={{
-                    headerShown: false
-                  }}
+                    name="Cart"
+                    component={Cart}
+                    options={{
+                        headerShown: false,
+                    }}
                 />
                 <Stack.Screen
-                  name="EditCart"
-                  component={EditCart}
-                  options={{
-                    headerShown: false
-                  }}
+                    name="EditCart"
+                    component={EditCart}
+                    options={{
+                        headerShown: false,
+                    }}
                 />
                 <Stack.Screen
-                  name="PaymentMethod"
-                  component={PaymentMethod}
-                  options={{
-                    headerShown: false
-                  }}
+                    name="PaymentMethod"
+                    component={PaymentMethod}
+                    options={{
+                        headerShown: false,
+                    }}
                 />
                 <Stack.Screen
-                  name="PaymentMethodNoCard"
-                  component={PaymentMethodNoCard}
-                  options={{
-                    headerShown: false
-                  }}
+                    name="PaymentMethodNoCard"
+                    component={PaymentMethodNoCard}
+                    options={{
+                        headerShown: false,
+                    }}
                 />
                 <Stack.Screen
-                  name="AddPaymentCard"
-                  component={AddPaymentCard}
-                  options={{
-                    headerShown: false
-                  }}
+                    name="AddPaymentCard"
+                    component={AddPaymentCard}
+                    options={{
+                        headerShown: false,
+                    }}
                 />
                 <Stack.Screen
-                  name="PaymentSuccess"
-                  component={PaymentSuccess}
-                  options={{
-                    headerShown: false
-                  }}
+                    name="PaymentSuccess"
+                    component={PaymentSuccess}
+                    options={{
+                        headerShown: false,
+                    }}
                 />
                 <Stack.Screen
-                  name="TrackingOrders"
-                  component={TrackingOrderV2}
-                  options={{
-                    headerShown: false
-                  }}
+                    name="TrackingOrders"
+                    component={TrackingOrderV2}
+                    options={{
+                        headerShown: false,
+                    }}
                 />
                 <Stack.Screen
-                 name="Call"
-                 component={Call}
-                 options={{
-                  headerShown: false
-                 }}
+                    name="Call"
+                    component={Call}
+                    options={{
+                        headerShown: false,
+                    }}
                 />
                 <Stack.Screen
-                  name="Message"
-                  component={Message}
-                  options={{
-                    headerShown: false
-                  }}
+                    name="Message"
+                    component={Message}
+                    options={{
+                        headerShown: false,
+                    }}
                 />
                 <Stack.Screen
-                  name="Menu"
-                  component={Menu}
-                  options={{
-                    headerShown: false
-                  }}
+                    name="Menu"
+                    component={Menu}
+                    options={{
+                        headerShown: false,
+                    }}
                 />
                 <Stack.Screen
-                  name="PersonalProfile"
-                  component={PersonalProfile}
-                  options={{
-                    headerShown: false
-                  }}
+                    name="PersonalProfile"
+                    component={PersonalProfile}
+                    options={{
+                        headerShown: false,
+                    }}
                 />
                 <Stack.Screen
-                  name="EditProfile"
-                  component={EditProfile}
-                  options={{
-                    headerShown: false
-                  }}
+                    name="EditProfile"
+                    component={EditProfile}
+                    options={{
+                        headerShown: false,
+                    }}
                 />
                 <Stack.Screen
-                  name="Address"
-                  component={Address}
-                  options={{
-                    headerShown: false
-                  }}
+                    name="Address"
+                    component={Address}
+                    options={{
+                        headerShown: false,
+                    }}
                 />
                 <Stack.Screen
-                  name="AddNewAddress"
-                  component={AddNewAddress}
-                  options={{
-                    headerShown: false
-                  }}
+                    name="AddNewAddress"
+                    component={AddNewAddress}
+                    options={{
+                        headerShown: false,
+                    }}
                 />
             </Stack.Navigator>
         </NavigationContainer>
