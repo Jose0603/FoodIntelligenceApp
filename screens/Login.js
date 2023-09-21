@@ -3,7 +3,7 @@ import React, { useState, useReducer, useEffect, useCallback } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { COLORS, FONTS } from '../constants'
 import Checkbox from 'expo-checkbox'
-import * as Animatable from "react-native-animatable"
+import * as Animatable from 'react-native-animatable'
 import Input from '../components/Input'
 import Button from '../components/Button'
 import icons from '../constants/icons'
@@ -11,13 +11,14 @@ import { validateInput } from '../utils/actions/formActions'
 import { reducer } from '../utils/reducers/formReducers'
 import { commonStyles } from '../styles/CommonStyles'
 import { StatusBar } from 'expo-status-bar'
+import { user_login } from '../api/user_api'
 
-const isTestMode = true
+const isTestMode = false
 
 const initialState = {
     inputValues: {
-        email: isTestMode ? 'example@gmail.com' : '',
-        password: isTestMode ? '**********' : '',
+        email: '',
+        password: '',
     },
     inputValidities: {
         email: false,
@@ -27,7 +28,7 @@ const initialState = {
 }
 
 const Login = ({ navigation }) => {
-    const [isChecked, setChecked] = useState(false);
+    const [isChecked, setChecked] = useState(false)
     const [error, setError] = useState()
     const [isLoading, setIsLoading] = useState(false)
     const [formState, dispatchFormState] = useReducer(reducer, initialState)
@@ -46,6 +47,12 @@ const Login = ({ navigation }) => {
         }
     }, [error])
 
+    // const handleLogin = () => {
+    //     user_login({
+    //         username: formState.inputValidities['email'],
+    //         password: formState.inputValidities['password'],
+    //     })
+    // }
     // implementing facebook authentication
     const facebookAuthHandler = () => {
         return null
@@ -66,12 +73,14 @@ const Login = ({ navigation }) => {
             <StatusBar style="light" />
             <View style={commonStyles.header}>
                 <Text style={commonStyles.headerTitle}>Log In</Text>
-                <Text
-                    style={commonStyles.subHeaderTitle}>Please sign in to your existing account</Text>
+                <Text style={commonStyles.subHeaderTitle}>
+                    Please sign in to your existing account
+                </Text>
             </View>
             <Animatable.View
                 animation="fadeInUpBig"
-                style={commonStyles.footer}>
+                style={commonStyles.footer}
+            >
                 <Text style={commonStyles.inputHeader}>Email</Text>
                 <Input
                     id="email"
@@ -93,7 +102,9 @@ const Login = ({ navigation }) => {
                 />
 
                 <View style={commonStyles.checkBoxContainer}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <View
+                        style={{ flexDirection: 'row', alignItems: 'center' }}
+                    >
                         <Checkbox
                             style={commonStyles.checkbox}
                             value={isChecked}
@@ -103,9 +114,11 @@ const Login = ({ navigation }) => {
                         <Text style={{ ...FONTS.body4 }}>Remenber me</Text>
                     </View>
                     <TouchableOpacity
-                        onPress={() => navigation.navigate("ForgotPassword")}
+                        onPress={() => navigation.navigate('ForgotPassword')}
                     >
-                        <Text style={{ ...FONTS.body4, color: COLORS.primary }}>Forgot Password ?</Text>
+                        <Text style={{ ...FONTS.body4, color: COLORS.primary }}>
+                            Forgot Password ?
+                        </Text>
                     </TouchableOpacity>
                 </View>
 
@@ -117,14 +130,26 @@ const Login = ({ navigation }) => {
                     style={commonStyles.btn}
                 />
                 <View style={commonStyles.center}>
-                    <Text style={{ ...FONTS.body4, color: COLORS.black }}>Don't have an account?{" "}</Text>
+                    <Text style={{ ...FONTS.body4, color: COLORS.black }}>
+                        Don't have an account?{' '}
+                    </Text>
                     <TouchableOpacity
-                        onPress={() => navigation.navigate("Signup")}
+                        onPress={() => navigation.navigate('Signup')}
                     >
-                        <Text style={{ ...FONTS.body4, color: COLORS.primary }}>SIGN UP</Text>
+                        <Text style={{ ...FONTS.body4, color: COLORS.primary }}>
+                            SIGN UP
+                        </Text>
                     </TouchableOpacity>
                 </View>
-                <Text style={{ ...FONTS.body4, color: COLORS.black, textAlign: 'center' }}>Or</Text>
+                <Text
+                    style={{
+                        ...FONTS.body4,
+                        color: COLORS.black,
+                        textAlign: 'center',
+                    }}
+                >
+                    Or
+                </Text>
 
                 <View style={commonStyles.socialContainer}>
                     <TouchableOpacity
