@@ -1,8 +1,8 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React, { useState, useReducer, useEffect, useCallback } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { COLORS, SIZES } from '../constants'
-import * as Animatable from "react-native-animatable"
+import { COLORS, SIZES } from '../../constants'
+import * as Animatable from 'react-native-animatable'
 import Input from '../components/Input'
 import Button from '../components/Button'
 import { validateInput } from '../utils/actions/formActions'
@@ -10,18 +10,18 @@ import { reducer } from '../utils/reducers/formReducers'
 import { commonStyles } from '../styles/CommonStyles'
 import { StatusBar } from 'expo-status-bar'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons'
 
 const isTestMode = true
 
 const initialState = {
     inputValues: {
         password: isTestMode ? '**********' : '',
-        confirmPassword: isTestMode ? '**********': ''
+        confirmPassword: isTestMode ? '**********' : '',
     },
     inputValidities: {
         password: false,
-        confirmPassword: false
+        confirmPassword: false,
     },
     formIsValid: false,
 }
@@ -47,49 +47,58 @@ const ResetPassword = ({ navigation }) => {
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.blue }}>
-            <StatusBar style="light"/>
+            <StatusBar style="light" />
             <View style={commonStyles.header}>
-                <TouchableOpacity 
-                onPress={()=>navigation.goBack()}
-                style={commonStyles.backIcon}>
-                    <MaterialIcons name="keyboard-arrow-left" size={24} color={COLORS.black} />
+                <TouchableOpacity
+                    onPress={() => navigation.goBack()}
+                    style={commonStyles.backIcon}
+                >
+                    <MaterialIcons
+                        name="keyboard-arrow-left"
+                        size={24}
+                        color={COLORS.black}
+                    />
                 </TouchableOpacity>
                 <Text style={commonStyles.headerTitle}>Reset Password</Text>
-                <Text
-                    style={commonStyles.subHeaderTitle}>Please reset your password to get started</Text>
+                <Text style={commonStyles.subHeaderTitle}>
+                    Please reset your password to get started
+                </Text>
             </View>
             <Animatable.View
                 animation="fadeInUpBig"
-                style={commonStyles.footer}>
-                < KeyboardAwareScrollView>
-                <Text style={commonStyles.inputHeader}>Password</Text>
-                <Input
-                    onInputChanged={inputChangedHandler}
-                    errorText={formState.inputValidities['password']}
-                    autoCapitalize="none"
-                    id="password"
-                    placeholder="*************"
-                    placeholderTextColor={COLORS.black}
-                    secureTextEntry={true}
-                />
+                style={commonStyles.footer}
+            >
+                <KeyboardAwareScrollView>
+                    <Text style={commonStyles.inputHeader}>Password</Text>
+                    <Input
+                        onInputChanged={inputChangedHandler}
+                        errorText={formState.inputValidities['password']}
+                        autoCapitalize="none"
+                        id="password"
+                        placeholder="*************"
+                        placeholderTextColor={COLORS.black}
+                        secureTextEntry={true}
+                    />
 
-                <Text style={commonStyles.inputHeader}>Re-Type Password</Text>
-                <Input
-                    onInputChanged={inputChangedHandler}
-                    errorText={formState.inputValidities['passwordConfirm']}
-                    autoCapitalize="none"
-                    id="passwordConfirm"
-                    placeholder="*************"
-                    placeholderTextColor={COLORS.black}
-                    secureTextEntry={true}
-                />
-                <Button
-                    title="RESET"
-                    isLoading={isLoading}
-                    filled
-                    onPress={() => navigation.navigate('Login')}
-                    style={commonStyles.btn1}
-                />
+                    <Text style={commonStyles.inputHeader}>
+                        Re-Type Password
+                    </Text>
+                    <Input
+                        onInputChanged={inputChangedHandler}
+                        errorText={formState.inputValidities['passwordConfirm']}
+                        autoCapitalize="none"
+                        id="passwordConfirm"
+                        placeholder="*************"
+                        placeholderTextColor={COLORS.black}
+                        secureTextEntry={true}
+                    />
+                    <Button
+                        title="RESET"
+                        isLoading={isLoading}
+                        filled
+                        onPress={() => navigation.navigate('Login')}
+                        style={commonStyles.btn1}
+                    />
                 </KeyboardAwareScrollView>
             </Animatable.View>
         </SafeAreaView>

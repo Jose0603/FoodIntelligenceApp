@@ -1,8 +1,8 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React, { useState, useReducer, useEffect, useCallback } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { COLORS } from '../constants'
-import * as Animatable from "react-native-animatable"
+import { COLORS } from '../../constants'
+import * as Animatable from 'react-native-animatable'
 import Input from '../components/Input'
 import Button from '../components/Button'
 import { validateInput } from '../utils/actions/formActions'
@@ -10,7 +10,7 @@ import { reducer } from '../utils/reducers/formReducers'
 import { commonStyles } from '../styles/CommonStyles'
 import { StatusBar } from 'expo-status-bar'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons'
 
 const isTestMode = true
 
@@ -19,13 +19,13 @@ const initialState = {
         fullName: isTestMode ? 'John Doe' : '',
         email: isTestMode ? 'example@gmail.com' : '',
         password: isTestMode ? '**********' : '',
-        confirmPassword: isTestMode ? '**********' : ''
+        confirmPassword: isTestMode ? '**********' : '',
     },
     inputValidities: {
         fullName: false,
         email: false,
         password: false,
-        confirmPassword: false
+        confirmPassword: false,
     },
     formIsValid: false,
 }
@@ -55,17 +55,24 @@ const Signup = ({ navigation }) => {
             <View style={commonStyles.header}>
                 <TouchableOpacity
                     onPress={() => navigation.goBack()}
-                    style={commonStyles.backIcon}>
-                    <MaterialIcons name="keyboard-arrow-left" size={24} color={COLORS.black} />
+                    style={commonStyles.backIcon}
+                >
+                    <MaterialIcons
+                        name="keyboard-arrow-left"
+                        size={24}
+                        color={COLORS.black}
+                    />
                 </TouchableOpacity>
                 <Text style={commonStyles.headerTitle}>Sign up</Text>
-                <Text
-                    style={commonStyles.subHeaderTitle}>Please sign up to get started</Text>
+                <Text style={commonStyles.subHeaderTitle}>
+                    Please sign up to get started
+                </Text>
             </View>
             <Animatable.View
                 animation="fadeInUpBig"
-                style={commonStyles.footer}>
-                < KeyboardAwareScrollView>
+                style={commonStyles.footer}
+            >
+                <KeyboardAwareScrollView>
                     <Text style={commonStyles.inputHeader}>Name</Text>
                     <Input
                         id="fullName"
@@ -94,7 +101,9 @@ const Signup = ({ navigation }) => {
                         secureTextEntry={true}
                     />
 
-                    <Text style={commonStyles.inputHeader}>Re-Type Password</Text>
+                    <Text style={commonStyles.inputHeader}>
+                        Re-Type Password
+                    </Text>
                     <Input
                         onInputChanged={inputChangedHandler}
                         errorText={formState.inputValidities['passwordConfirm']}

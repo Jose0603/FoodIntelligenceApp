@@ -1,15 +1,15 @@
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { COLORS, FONTS, SIZES, icons } from '../constants'
-import { Ionicons } from '@expo/vector-icons';
+import { COLORS, FONTS, SIZES, icons } from '../../constants'
+import { Ionicons } from '@expo/vector-icons'
 import * as Location from 'expo-location'
-import { StatusBar } from 'expo-status-bar';
+import { StatusBar } from 'expo-status-bar'
 
 const LocationAccess = ({ navigation }) => {
-    const arrayGPS = [];
-    const [gps, setGps] = useState(null);
-    const [errorMsg, setErrorMsg] = useState(null);
+    const arrayGPS = []
+    const [gps, setGps] = useState(null)
+    const [errorMsg, setErrorMsg] = useState(null)
     const [address, setAddress] = useState(null)
 
     // Get user location
@@ -42,21 +42,29 @@ const LocationAccess = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.area}>
-            <StatusBar hidden={true}/>
+            <StatusBar hidden={true} />
             <View style={styles.center}>
                 <Image
                     source={icons.location}
-                    resizeMode='contain'
-                    style={styles.locationImage} />
+                    resizeMode="contain"
+                    style={styles.locationImage}
+                />
                 <TouchableOpacity
-                    onPress={() => navigation.navigate("Main")}
-                    style={styles.btn}>
+                    onPress={() => navigation.navigate('Main')}
+                    style={styles.btn}
+                >
                     <Text style={styles.btnText}>Access Location</Text>
                     <View style={styles.iconContainer}>
-                        <Ionicons name="location-outline" size={20} color={COLORS.white} />
+                        <Ionicons
+                            name="location-outline"
+                            size={20}
+                            color={COLORS.white}
+                        />
                     </View>
                 </TouchableOpacity>
-                <Text style={styles.bottomText}>FOODA WILL ACCESS YOUR LOCATION ONLY WHILE USING THE APP</Text>
+                <Text style={styles.bottomText}>
+                    FOODA WILL ACCESS YOUR LOCATION ONLY WHILE USING THE APP
+                </Text>
             </View>
         </SafeAreaView>
     )
@@ -65,13 +73,13 @@ const LocationAccess = ({ navigation }) => {
 const styles = StyleSheet.create({
     area: {
         flex: 1,
-        backgroundColor: COLORS.white
+        backgroundColor: COLORS.white,
     },
     center: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        marginHorizontal: 22
+        marginHorizontal: 22,
     },
     btn: {
         paddingHorizontal: SIZES.padding,
@@ -85,16 +93,16 @@ const styles = StyleSheet.create({
         width: SIZES.width - 44,
         marginTop: SIZES.padding2 * 4,
         marginBottom: SIZES.padding2 * 2,
-        backgroundColor: COLORS.primary
+        backgroundColor: COLORS.primary,
     },
     locationImage: {
         height: SIZES.width * 0.7,
-        width: SIZES.width * 0.7
+        width: SIZES.width * 0.7,
     },
     btnText: {
         ...FONTS.body3,
         textTransform: 'uppercase',
-        color: COLORS.white
+        color: COLORS.white,
     },
     iconContainer: {
         marginLeft: SIZES.padding3,
@@ -103,13 +111,13 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'rgba(255,255,255,0.2)'
+        backgroundColor: 'rgba(255,255,255,0.2)',
     },
     bottomText: {
         ...FONTS.body4,
         textTransform: 'uppercase',
         marginVertical: SIZES.padding * 2,
-        textAlign: 'center'
-    }
+        textAlign: 'center',
+    },
 })
 export default LocationAccess

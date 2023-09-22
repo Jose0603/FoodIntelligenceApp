@@ -2,13 +2,13 @@ import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useNavigation } from '@react-navigation/native'
-import { COLORS, FONTS, SIZES, icons, images } from '../constants'
+import { COLORS, FONTS, SIZES, icons, images } from '../../constants'
 import { commonStyles } from '../styles/CommonStyles'
 import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons'
 import { ScrollView } from 'react-native-virtualized-view'
 import { StatusBar } from 'expo-status-bar'
 import { useContext } from 'react'
-import { AuthContext } from '../src/context/AuthContext'
+import { AuthContext } from '../context/AuthContext'
 
 const Menu = () => {
     const { logout } = useContext(AuthContext)

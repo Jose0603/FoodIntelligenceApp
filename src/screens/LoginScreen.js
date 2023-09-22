@@ -1,18 +1,18 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native'
 import React, { useState, useReducer, useEffect, useCallback } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { COLORS, FONTS } from '../constants'
+import { COLORS, FONTS } from '../../constants'
 import Checkbox from 'expo-checkbox'
 import * as Animatable from 'react-native-animatable'
 import Input from '../components/Input'
 import Button from '../components/Button'
-import icons from '../constants/icons'
+import icons from '../../constants/icons'
 import { validateInput } from '../utils/actions/formActions'
 import { reducer } from '../utils/reducers/formReducers'
 import { commonStyles } from '../styles/CommonStyles'
 import { StatusBar } from 'expo-status-bar'
 import { useContext } from 'react'
-import { AuthContext } from '../src/context/AuthContext'
+import { AuthContext } from '../context/AuthContext'
 
 const isTestMode = true
 

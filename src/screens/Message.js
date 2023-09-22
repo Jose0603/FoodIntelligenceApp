@@ -4,13 +4,13 @@ import { useNavigation } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { GiftedChat, Bubble } from 'react-native-gifted-chat'
 import { commonStyles } from '../styles/CommonStyles'
-import { COLORS, icons, images } from '../constants'
-import { FontAwesome } from "@expo/vector-icons";
+import { COLORS, icons, images } from '../../constants'
+import { FontAwesome } from '@expo/vector-icons'
 import { StatusBar } from 'expo-status-bar'
 
 const Message = () => {
-    const [inputMessage, setInputMessage] = useState('');
-    const [messages, setMessages] = useState([]);
+    const [inputMessage, setInputMessage] = useState('')
+    const [messages, setMessages] = useState([])
 
     const handleInputText = (text) => {
         setInputMessage(text)
@@ -96,7 +96,7 @@ const Message = () => {
     }
 
     const renderHeader = () => {
-        const navigation = useNavigation();
+        const navigation = useNavigation()
 
         return (
             <View
@@ -104,18 +104,31 @@ const Message = () => {
                     flexDirection: 'row',
                     alignItems: 'center',
                     marginTop: 20,
-                }}>
+                }}
+            >
                 <TouchableOpacity
                     onPress={() => navigation.goBack()}
                     style={commonStyles.header1Icon}
                 >
                     <Image
-                        resizeMode='contain'
+                        resizeMode="contain"
                         source={icons.close}
-                        style={{ height: 24, width: 24, tintColor: COLORS.black }}
+                        style={{
+                            height: 24,
+                            width: 24,
+                            tintColor: COLORS.black,
+                        }}
                     />
                 </TouchableOpacity>
-                <Text style={{ marginLeft: 12, fontSize: 17, fontFamily: 'regular' }}>Linda Bi</Text>
+                <Text
+                    style={{
+                        marginLeft: 12,
+                        fontSize: 17,
+                        fontFamily: 'regular',
+                    }}
+                >
+                    Linda Bi
+                </Text>
             </View>
         )
     }
@@ -128,7 +141,7 @@ const Message = () => {
                 <View style={{ flex: 1, justifyContent: 'center' }}>
                     <GiftedChat
                         messages={messages}
-                        renderInputToolbar={() => { }}
+                        renderInputToolbar={() => {}}
                         user={{ _id: 1 }}
                         minInputToolbarHeight={0}
                         renderMessage={renderMessage}

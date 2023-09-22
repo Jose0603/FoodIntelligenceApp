@@ -1,15 +1,15 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React, { useState, useReducer, useEffect, useCallback } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { COLORS } from '../constants'
-import * as Animatable from "react-native-animatable"
+import { COLORS } from '../../constants'
+import * as Animatable from 'react-native-animatable'
 import Input from '../components/Input'
 import Button from '../components/Button'
 import { validateInput } from '../utils/actions/formActions'
 import { reducer } from '../utils/reducers/formReducers'
 import { commonStyles } from '../styles/CommonStyles'
 import { StatusBar } from 'expo-status-bar'
-import { MaterialIcons } from "@expo/vector-icons"
+import { MaterialIcons } from '@expo/vector-icons'
 
 const isTestMode = true
 
@@ -42,22 +42,29 @@ const ForgotPassword = ({ navigation }) => {
         }
     }, [error])
 
-
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.blue }}>
             <StatusBar style="light" />
             <View style={commonStyles.header}>
                 <TouchableOpacity
                     onPress={() => navigation.goBack()}
-                    style={commonStyles.backIcon}>
-                    <MaterialIcons name="keyboard-arrow-left" size={24} color={COLORS.black} />
+                    style={commonStyles.backIcon}
+                >
+                    <MaterialIcons
+                        name="keyboard-arrow-left"
+                        size={24}
+                        color={COLORS.black}
+                    />
                 </TouchableOpacity>
                 <Text style={commonStyles.headerTitle}>Forgot Password</Text>
-                <Text style={commonStyles.subHeaderTitle}>Please provide to your existing email</Text>
+                <Text style={commonStyles.subHeaderTitle}>
+                    Please provide to your existing email
+                </Text>
             </View>
             <Animatable.View
                 animation="fadeInUpBig"
-                style={commonStyles.footer}>
+                style={commonStyles.footer}
+            >
                 <Text style={commonStyles.inputHeader}>Email</Text>
                 <Input
                     id="email"

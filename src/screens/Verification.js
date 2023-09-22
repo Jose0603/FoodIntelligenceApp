@@ -1,12 +1,12 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import React, { useState, useEffect, useRef } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { COLORS } from '../constants'
-import * as Animatable from "react-native-animatable"
+import { COLORS } from '../../constants'
+import * as Animatable from 'react-native-animatable'
 import Button from '../components/Button'
 import { commonStyles } from '../styles/CommonStyles'
 import { StatusBar } from 'expo-status-bar'
-import { MaterialIcons } from "@expo/vector-icons"
+import { MaterialIcons } from '@expo/vector-icons'
 import OTPTextInput from 'react-native-otp-textinput'
 
 const Verification = ({ navigation }) => {
@@ -26,22 +26,32 @@ const Verification = ({ navigation }) => {
             <View style={commonStyles.header}>
                 <TouchableOpacity
                     onPress={() => navigation.goBack()}
-                    style={commonStyles.backIcon}>
-                    <MaterialIcons name="keyboard-arrow-left" size={24} color={COLORS.black} />
+                    style={commonStyles.backIcon}
+                >
+                    <MaterialIcons
+                        name="keyboard-arrow-left"
+                        size={24}
+                        color={COLORS.black}
+                    />
                 </TouchableOpacity>
                 <Text style={commonStyles.headerTitle}>Verification</Text>
-                <Text style={commonStyles.subHeaderTitle}>We have sent a code to your email</Text>
-                <Text style={commonStyles.subHeaderTitleBold}>example@gmail.com</Text>
+                <Text style={commonStyles.subHeaderTitle}>
+                    We have sent a code to your email
+                </Text>
+                <Text style={commonStyles.subHeaderTitleBold}>
+                    example@gmail.com
+                </Text>
             </View>
             <Animatable.View
                 animation="fadeInUpBig"
-                style={commonStyles.footer}>
+                style={commonStyles.footer}
+            >
                 <View style={styles.center}>
                     <Text style={commonStyles.inputHeader}>Code</Text>
-                    <TouchableOpacity
-                        onPress={() => console.log("Resend")}
-                    >
-                        <Text style={{ textDecorationLine: 'underline' }}>Resend</Text>
+                    <TouchableOpacity onPress={() => console.log('Resend')}>
+                        <Text style={{ textDecorationLine: 'underline' }}>
+                            Resend
+                        </Text>
                     </TouchableOpacity>
                 </View>
                 <OTPTextInput
@@ -65,8 +75,8 @@ const styles = StyleSheet.create({
     center: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center'
-    }
+        alignItems: 'center',
+    },
 })
 
 export default Verification

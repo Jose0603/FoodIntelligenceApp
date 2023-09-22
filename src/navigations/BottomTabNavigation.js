@@ -1,9 +1,17 @@
 import { View, Text, Platform } from 'react-native'
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { COLORS } from '../constants'
-import { HomeV1, Profile, Search, Card, Notifications, Menu, MyOrders } from '../screens'
-import { Ionicons, SimpleLineIcons} from '@expo/vector-icons'
+import { COLORS } from '../../constants'
+import {
+    HomeV1,
+    Profile,
+    Search,
+    Card,
+    Notifications,
+    Menu,
+    MyOrders,
+} from '../screens'
+import { Ionicons, SimpleLineIcons } from '@expo/vector-icons'
 import DrawerNavigation from './DrawerNavigation'
 
 const Tab = createBottomTabNavigator()
@@ -31,11 +39,11 @@ const BottomTabNavigation = () => {
                 options={{
                     tabBarIcon: ({ focused }) => {
                         return (
-                            <SimpleLineIcons name="home" size={24} color={
-                                focused
-                                    ? COLORS.primary
-                                    : COLORS.black
-                            } />
+                            <SimpleLineIcons
+                                name="home"
+                                size={24}
+                                color={focused ? COLORS.primary : COLORS.black}
+                            />
                         )
                     },
                 }}
@@ -47,14 +55,10 @@ const BottomTabNavigation = () => {
                 options={{
                     tabBarIcon: ({ focused }) => {
                         return (
-                            <Ionicons 
-                            name="list-sharp" 
-                            size={24} 
-                            color={
-                                focused
-                                    ? COLORS.primary
-                                    : COLORS.black
-                            }
+                            <Ionicons
+                                name="list-sharp"
+                                size={24}
+                                color={focused ? COLORS.primary : COLORS.black}
                             />
                         )
                     },
@@ -81,7 +85,11 @@ const BottomTabNavigation = () => {
                                     borderColor: COLORS.white,
                                 }}
                             >
-                               <Ionicons name="md-search-outline" size={24} color={COLORS.white} />
+                                <Ionicons
+                                    name="md-search-outline"
+                                    size={24}
+                                    color={COLORS.white}
+                                />
                             </View>
                         )
                     },
@@ -94,12 +102,10 @@ const BottomTabNavigation = () => {
                 options={{
                     tabBarIcon: ({ focused }) => {
                         return (
-                            <Ionicons 
-                            name="notifications-outline" 
-                            size={24} 
-                            color={
-                                focused ? COLORS.primary : COLORS.black
-                            }
+                            <Ionicons
+                                name="notifications-outline"
+                                size={24}
+                                color={focused ? COLORS.primary : COLORS.black}
                             />
                         )
                     },
@@ -113,12 +119,10 @@ const BottomTabNavigation = () => {
                     tabBarIcon: ({ focused }) => {
                         return (
                             <Ionicons
-                            name="ios-person-outline"
-                            size={24}
-                            color={
-                                focused ? COLORS.primary : COLORS.black
-                            }
-                        />
+                                name="ios-person-outline"
+                                size={24}
+                                color={focused ? COLORS.primary : COLORS.black}
+                            />
                         )
                     },
                 }}

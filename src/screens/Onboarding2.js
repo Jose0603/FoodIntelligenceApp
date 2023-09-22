@@ -1,7 +1,7 @@
 import { View, Text, Image } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { COLORS, FONTS, SIZES, images } from '../constants'
+import { COLORS, FONTS, SIZES, images } from '../../constants'
 import PageContainer from '../components/PageContainer'
 import DotsView from '../components/DotsView'
 import Button from '../components/Button'

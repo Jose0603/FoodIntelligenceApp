@@ -1,10 +1,16 @@
 import { View, Text, StyleSheet, Image } from 'react-native'
-import React, { useRef, useEffect, useReducer, useCallback, useState } from 'react'
+import React, {
+    useRef,
+    useEffect,
+    useReducer,
+    useCallback,
+    useState,
+} from 'react'
 import MapView, { Marker, Callout, PROVIDER_GOOGLE } from 'react-native-maps'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import {  icons, SIZES, COLORS, FONTS } from '../constants'
+import { icons, SIZES, COLORS, FONTS } from '../../constants'
 import { TouchableOpacity } from 'react-native'
-import RBSheet from "react-native-raw-bottom-sheet"
+import RBSheet from 'react-native-raw-bottom-sheet'
 import { commonStyles } from '../styles/CommonStyles'
 import Input from '../components/Input'
 import { validateInput } from '../utils/actions/formActions'
@@ -17,22 +23,22 @@ const initialState = {
         address: '',
         street: '',
         postalCode: '',
-        appartment: ''
+        appartment: '',
     },
     inputValidities: {
         address: false,
         street: false,
         postalCode: false,
-        appartment: false
+        appartment: false,
     },
     formIsValid: false,
 }
 
 const AddNewAddress = ({ navigation }) => {
-    const bottomSheetRef = useRef(null);
+    const bottomSheetRef = useRef(null)
     const [error, setError] = useState()
     const [formState, dispatchFormState] = useReducer(reducer, initialState)
-    const [selectedLabel, setSelectedLabel] = useState(null);
+    const [selectedLabel, setSelectedLabel] = useState(null)
 
     const handleLabelSelection = (label) => {
         setSelectedLabel(label)
@@ -54,21 +60,23 @@ const AddNewAddress = ({ navigation }) => {
 
     // Open the bottom sheet on component mount
     useEffect(() => {
-        bottomSheetRef.current.open();
-    }, []);
+        bottomSheetRef.current.open()
+    }, [])
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <StatusBar hidden={true} />
-            <View style={{
-                position: 'absolute',
-                marginHorizontal: 16,
-                position: 'absolute',
-                flexDirection: 'row',
-                alignItems: 'center',
-                top: 22,
-                zIndex: 999
-            }}>
+            <View
+                style={{
+                    position: 'absolute',
+                    marginHorizontal: 16,
+                    position: 'absolute',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    top: 22,
+                    zIndex: 999,
+                }}
+            >
                 <TouchableOpacity
                     onPress={() => navigation.goBack()}
                     style={{
@@ -79,7 +87,7 @@ const AddNewAddress = ({ navigation }) => {
                         alignItems: 'center',
                         justifyContent: 'center',
                         marginRight: 16,
-                        zIndex: 9999
+                        zIndex: 9999,
                     }}
                 >
                     <Image
@@ -88,7 +96,7 @@ const AddNewAddress = ({ navigation }) => {
                         style={{
                             height: 24,
                             width: 24,
-                            tintColor: COLORS.white
+                            tintColor: COLORS.white,
                         }}
                     />
                 </TouchableOpacity>
@@ -112,7 +120,7 @@ const AddNewAddress = ({ navigation }) => {
                     image={icons.mapMarkerIcon}
                     title="Move"
                     description="Address"
-                    onPress={() => console.log("Move to another screen")}
+                    onPress={() => console.log('Move to another screen')}
                 >
                     <Callout tooltip>
                         <View>
@@ -141,62 +149,98 @@ const AddNewAddress = ({ navigation }) => {
                 closeOnPressMask={false}
                 customStyles={{
                     wrapper: {
-                        backgroundColor: "transparent",
+                        backgroundColor: 'transparent',
                     },
                     draggableIcon: {
                         backgroundColor: COLORS.gray6,
-                        width: 100
-                    }
+                        width: 100,
+                    },
                 }}
             >
-                <View style={{
-                    width: SIZES.width - 32,
-                    marginHorizontal: 16,
-                }}>
-                    <View
-                        style={{ flexDirection: 'row' }}
-                    >
+                <View
+                    style={{
+                        width: SIZES.width - 32,
+                        marginHorizontal: 16,
+                    }}
+                >
+                    <View style={{ flexDirection: 'row' }}>
                         <View style={{ marginVertical: 0 }}>
-                            <View style={{ marginTop: 0, width: SIZES.width - 32 }}>
-                                <Text style={commonStyles.inputHeader}>Address</Text>
+                            <View
+                                style={{
+                                    marginTop: 0,
+                                    width: SIZES.width - 32,
+                                }}
+                            >
+                                <Text style={commonStyles.inputHeader}>
+                                    Address
+                                </Text>
                                 <Input
                                     id="address"
                                     onInputChanged={inputChangedHandler}
-                                    errorText={formState.inputValidities['address']}
+                                    errorText={
+                                        formState.inputValidities['address']
+                                    }
                                     placeholder="3235 Royal Ln. mesa, new jersy 34567"
                                     placeholderTextColor={COLORS.black}
-
                                 />
                             </View>
 
                             <View style={{ marginTop: 12 }}>
-                                <Text style={commonStyles.inputHeader}>Appartment</Text>
+                                <Text style={commonStyles.inputHeader}>
+                                    Appartment
+                                </Text>
                                 <Input
                                     id="appartment"
                                     onInputChanged={inputChangedHandler}
-                                    errorText={formState.inputValidities['appartment']}
+                                    errorText={
+                                        formState.inputValidities['appartment']
+                                    }
                                     placeholder="2143"
                                     placeholderTextColor={COLORS.black}
                                 />
                             </View>
 
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 12 }}>
-                                <View style={{ width: (SIZES.width - 32) / 2 - 10 }}>
-                                    <Text style={commonStyles.inputHeader}>Street</Text>
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between',
+                                    marginTop: 12,
+                                }}
+                            >
+                                <View
+                                    style={{
+                                        width: (SIZES.width - 32) / 2 - 10,
+                                    }}
+                                >
+                                    <Text style={commonStyles.inputHeader}>
+                                        Street
+                                    </Text>
                                     <Input
                                         id="street"
                                         onInputChanged={inputChangedHandler}
-                                        errorText={formState.inputValidities['street']}
+                                        errorText={
+                                            formState.inputValidities['street']
+                                        }
                                         placeholder="hason nagar"
                                         placeholderTextColor={COLORS.black}
                                     />
                                 </View>
-                                <View style={{ width: (SIZES.width - 32) / 2 - 10 }}>
-                                    <Text style={commonStyles.inputHeader}>Post Code</Text>
+                                <View
+                                    style={{
+                                        width: (SIZES.width - 32) / 2 - 10,
+                                    }}
+                                >
+                                    <Text style={commonStyles.inputHeader}>
+                                        Post Code
+                                    </Text>
                                     <Input
                                         id="postalCode"
                                         onInputChanged={inputChangedHandler}
-                                        errorText={formState.inputValidities['postalCode']}
+                                        errorText={
+                                            formState.inputValidities[
+                                                'postalCode'
+                                            ]
+                                        }
                                         placeholder="3456"
                                         placeholderTextColor={COLORS.black}
                                     />
@@ -205,48 +249,77 @@ const AddNewAddress = ({ navigation }) => {
                         </View>
                     </View>
                     <View>
-                        <Text style={{ fontSize: 13, fontFamily: 'regular', marginBottom: 2 }}>DELIVER TIME</Text>
+                        <Text
+                            style={{
+                                fontSize: 13,
+                                fontFamily: 'regular',
+                                marginBottom: 2,
+                            }}
+                        >
+                            DELIVER TIME
+                        </Text>
 
-                        <View style={{ flexDirection: "row", marginVertical: 13 }}>
+                        <View
+                            style={{ flexDirection: 'row', marginVertical: 13 }}
+                        >
                             <TouchableOpacity
                                 style={[
                                     styles.checkboxContainer,
-                                    selectedLabel === "home" && styles.selectedCheckbox
+                                    selectedLabel === 'home' &&
+                                        styles.selectedCheckbox,
                                 ]}
-                                onPress={() => handleLabelSelection("home")}
+                                onPress={() => handleLabelSelection('home')}
                             >
-                                <Text style={[selectedLabel === "home" && styles.checkboxText]}>Home</Text>
+                                <Text
+                                    style={[
+                                        selectedLabel === 'home' &&
+                                            styles.checkboxText,
+                                    ]}
+                                >
+                                    Home
+                                </Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity
                                 style={[
                                     styles.checkboxContainer,
-                                    selectedLabel === "work" && styles.selectedCheckbox
+                                    selectedLabel === 'work' &&
+                                        styles.selectedCheckbox,
                                 ]}
-                                onPress={() => handleLabelSelection("work")}
+                                onPress={() => handleLabelSelection('work')}
                             >
-                                <Text style={[selectedLabel === "work" && styles.checkboxText]}>Work</Text>
+                                <Text
+                                    style={[
+                                        selectedLabel === 'work' &&
+                                            styles.checkboxText,
+                                    ]}
+                                >
+                                    Work
+                                </Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity
                                 style={[
                                     styles.checkboxContainer,
-                                    selectedLabel === "other" && styles.selectedCheckbox
+                                    selectedLabel === 'other' &&
+                                        styles.selectedCheckbox,
                                 ]}
-                                onPress={() => handleLabelSelection("other")}
+                                onPress={() => handleLabelSelection('other')}
                             >
-                                <Text style={
-                                    [
-                                        selectedLabel === "other" && styles.checkboxText
-                                    ]
-                                }>Other</Text>
+                                <Text
+                                    style={[
+                                        selectedLabel === 'other' &&
+                                            styles.checkboxText,
+                                    ]}
+                                >
+                                    Other
+                                </Text>
                             </TouchableOpacity>
-
                         </View>
                         <Button
                             filled
                             title="SAVE LOCATION"
-                            onPress={() => navigation.navigate("Address")}
+                            onPress={() => navigation.navigate('Address')}
                         />
                     </View>
                 </View>
@@ -258,7 +331,7 @@ const AddNewAddress = ({ navigation }) => {
 const styles = StyleSheet.create({
     map: {
         height: '100%',
-        zIndex: 1
+        zIndex: 1,
     },
     // Callout bubble
     bubble: {
@@ -298,7 +371,7 @@ const styles = StyleSheet.create({
         color: COLORS.gray5,
         marginVertical: 3,
         fontFamily: 'bold',
-        marginRight: 6
+        marginRight: 6,
     },
     btn1: {
         width: 45,
@@ -306,7 +379,7 @@ const styles = StyleSheet.create({
         borderRadius: 22.5,
         backgroundColor: COLORS.primary,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     btn2: {
         width: 45,
@@ -315,7 +388,7 @@ const styles = StyleSheet.create({
         borderColor: COLORS.primary,
         borderWidth: 1,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     checkboxContainer: {
         paddingHorizontal: 8,
@@ -326,11 +399,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginRight: 12,
-        marginBottom: 12
-
+        marginBottom: 12,
     },
     roundedCheckBoxContainer: {
-        alignItems: "center",
+        alignItems: 'center',
         justifyContent: 'center',
         height: 48,
         width: 48,
@@ -338,15 +410,15 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: COLORS.gray,
         backgroundColor: COLORS.gray,
-        marginRight: 12
+        marginRight: 12,
     },
     selectedCheckbox: {
-        backgroundColor: COLORS.primary
+        backgroundColor: COLORS.primary,
     },
     checkboxText: {
         color: COLORS.white,
         fontSize: 16,
-        fontFamily: 'regular'
+        fontFamily: 'regular',
     },
     starContainer: {
         height: 48,
@@ -356,8 +428,8 @@ const styles = StyleSheet.create({
         borderColor: COLORS.secondaryGray,
         alignItems: 'center',
         justifyContent: 'center',
-        marginRight: 6
-    }
+        marginRight: 6,
+    },
 })
 
 export default AddNewAddress

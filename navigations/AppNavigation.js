@@ -34,10 +34,10 @@ import {
     AddNewAddress,
     Call,
     TrackingOrderV2,
-} from '../screens'
+} from '../src/screens'
 import { NavigationContainer } from '@react-navigation/native'
-import BottomTabNavigation from './BottomTabNavigation'
-import DrawerNavigation from './DrawerNavigation'
+import BottomTabNavigation from '../src/navigations/BottomTabNavigation'
+import DrawerNavigation from '../src/navigations/DrawerNavigation'
 
 const Stack = createNativeStackNavigator()
 
