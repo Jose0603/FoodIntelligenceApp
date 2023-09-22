@@ -70,7 +70,9 @@ const AppNavigation = () => {
 
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName={'Onboarding1'}>
+            <Stack.Navigator
+                initialRouteName={isFirstLaunch ? 'Onboarding1' : 'Main'}
+            >
                 <Stack.Screen
                     name="Onboarding1"
                     component={Onboarding1}

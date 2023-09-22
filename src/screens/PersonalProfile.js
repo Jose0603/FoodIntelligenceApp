@@ -1,5 +1,5 @@
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { ScrollView } from 'react-native-virtualized-view'
 import { COLORS, SIZES, FONTS, icons, images } from '../../constants'
 import { useNavigation } from '@react-navigation/native'
@@ -7,6 +7,7 @@ import { commonStyles } from '../styles/CommonStyles'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons'
 import { StatusBar } from 'expo-status-bar'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const PersonalProfile = () => {
     const renderHeader = () => {
@@ -64,6 +65,24 @@ const PersonalProfile = () => {
     }
 
     const renderUserProfile = () => {
+        const [userFirstName, setUserFirstName] = useState(null)
+        const getUserInfo = async () => {
+            try {
+                let userInfo = await AsyncStorage.getItem('userInfo')
+                userInfo = JSON.parse(userInfo)
+                if (userInfo) {
+                    setUserFirstName(userInfo.fullName)
+                }
+            } catch (error) {
+                console.log(
+                    '🚀 ~ file: AuthContext.js:28 ~ isLogin ~ error:',
+                    error
+                )
+            }
+        }
+        useEffect(() => {
+            getUserInfo()
+        }, [])
         return (
             <View
                 style={{
@@ -72,7 +91,7 @@ const PersonalProfile = () => {
                     marginVertical: 16,
                 }}
             >
-                <Image
+                {/* <Image
                     source={images.avatar2}
                     resizeMode="contain"
                     style={{
@@ -80,10 +99,10 @@ const PersonalProfile = () => {
                         width: 100,
                         borderRadius: 50,
                     }}
-                />
+                /> */}
                 <View style={{ marginLeft: 12 }}>
-                    <Text style={{ ...FONTS.h4 }}>Vishal Khadok</Text>
-                    <Text
+                    <Text style={{ ...FONTS.h4 }}>{userFirstName}</Text>
+                    {/* <Text
                         style={{
                             fontSize: 12,
                             fontFamily: 'regular',
@@ -92,13 +111,36 @@ const PersonalProfile = () => {
                         }}
                     >
                         I love fast food
-                    </Text>
+                    </Text> */}
                 </View>
             </View>
         )
     }
 
     const renderUserProfileInfo = () => {
+        const [userFirstName, setUserFirstName] = useState(null)
+        const [email, setEmail] = useState(null)
+        const [phoneNumber, setPhoneNumber] = useState(null)
+
+        const getUserInfo = async () => {
+            try {
+                let userInfo = await AsyncStorage.getItem('userInfo')
+                userInfo = JSON.parse(userInfo)
+                if (userInfo) {
+                    setUserFirstName(userInfo.fullName)
+                    setEmail(userInfo.email)
+                    setPhoneNumber(userInfo.phoneNumber)
+                }
+            } catch (error) {
+                console.log(
+                    '🚀 ~ file: AuthContext.js:28 ~ isLogin ~ error:',
+                    error
+                )
+            }
+        }
+        useEffect(() => {
+            getUserInfo()
+        }, [])
         return (
             <View style={{ flexDirection: 'column' }}>
                 <View style={styles.container}>
@@ -114,7 +156,7 @@ const PersonalProfile = () => {
                             <View style={{ flexDirection: 'column' }}>
                                 <Text style={styles.boldBody}>Full Name</Text>
                                 <Text style={styles.textBody}>
-                                    Vishal Khadok
+                                    {userFirstName}
                                 </Text>
                             </View>
                         </View>
@@ -130,9 +172,7 @@ const PersonalProfile = () => {
                             </View>
                             <View style={{ flexDirection: 'column' }}>
                                 <Text style={styles.boldBody}>Email</Text>
-                                <Text style={styles.textBody}>
-                                    hello@gmail.com
-                                </Text>
+                                <Text style={styles.textBody}>{email}</Text>
                             </View>
                         </View>
                     </TouchableOpacity>
@@ -149,7 +189,9 @@ const PersonalProfile = () => {
                                 <Text style={styles.boldBody}>
                                     Phone Number
                                 </Text>
-                                <Text style={styles.textBody}>408-278-248</Text>
+                                <Text style={styles.textBody}>
+                                    {phoneNumber}
+                                </Text>
                             </View>
                         </View>
                     </TouchableOpacity>

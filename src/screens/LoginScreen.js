@@ -20,8 +20,6 @@ const initialState = {
     inputValues: {
         email: isTestMode ? 'Jose0603' : '',
         password: isTestMode ? 'Test1234*' : '',
-        email: '',
-        password: '',
     },
     inputValidities: {
         email: false,

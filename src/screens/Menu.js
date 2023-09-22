@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useNavigation } from '@react-navigation/native'
 import { COLORS, FONTS, SIZES, icons, images } from '../../constants'
@@ -9,6 +9,7 @@ import { ScrollView } from 'react-native-virtualized-view'
 import { StatusBar } from 'expo-status-bar'
 import { useContext } from 'react'
 import { AuthContext } from '../context/AuthContext'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Menu = () => {
     const { logout } = useContext(AuthContext)
@@ -67,6 +68,24 @@ const Menu = () => {
     }
 
     const renderUserProfile = () => {
+        const [userFirstName, setUserFirstName] = useState(null)
+        const getUserInfo = async () => {
+            try {
+                let userInfo = await AsyncStorage.getItem('userInfo')
+                userInfo = JSON.parse(userInfo)
+                if (userInfo) {
+                    setUserFirstName(userInfo.fullName)
+                }
+            } catch (error) {
+                console.log(
+                    '🚀 ~ file: AuthContext.js:28 ~ isLogin ~ error:',
+                    error
+                )
+            }
+        }
+        useEffect(() => {
+            getUserInfo()
+        }, [])
         return (
             <View
                 style={{
@@ -75,7 +94,7 @@ const Menu = () => {
                     marginVertical: 16,
                 }}
             >
-                <Image
+                {/* <Image
                     source={images.avatar2}
                     resizeMode="contain"
                     style={{
@@ -83,10 +102,10 @@ const Menu = () => {
                         width: 100,
                         borderRadius: 50,
                     }}
-                />
+                /> */}
                 <View style={{ marginLeft: 12 }}>
-                    <Text style={{ ...FONTS.h4 }}>Vishal Khadok</Text>
-                    <Text
+                    <Text style={{ ...FONTS.h4 }}>{userFirstName}</Text>
+                    {/* <Text
                         style={{
                             fontSize: 12,
                             fontFamily: 'regular',
@@ -95,7 +114,7 @@ const Menu = () => {
                         }}
                     >
                         I love fast food
-                    </Text>
+                    </Text> */}
                 </View>
             </View>
         )
@@ -169,7 +188,7 @@ const Menu = () => {
                             />
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                         onPress={() => navigation.navigate('Cart')}
                         style={styles.subContainer}
                     >
@@ -231,10 +250,10 @@ const Menu = () => {
                                 style={styles.iconRight}
                             />
                         </View>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
 
-                <View style={styles.container}>
+                {/* <View style={styles.container}>
                     <TouchableOpacity
                         onPress={() => console.log('FAQS')}
                         style={styles.subContainer}
@@ -298,7 +317,7 @@ const Menu = () => {
                             />
                         </View>
                     </TouchableOpacity>
-                </View>
+                </View> */}
 
                 <View style={[styles.container, { marginBottom: 100 }]}>
                     <TouchableOpacity
