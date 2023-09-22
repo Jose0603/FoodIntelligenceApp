@@ -25,12 +25,12 @@ const Onboarding1 = ({ navigation }) => {
         return () => clearInterval(intervalId)
     }, [])
 
-    useEffect(() => {
-        if (progress >= 1) {
-            // navigate to the Feed Screen
-            navigation.navigate('Onboarding2')
-        }
-    }, [progress, navigation])
+    // useEffect(() => {
+    //     if (progress >= 1) {
+    //         // navigate to the Feed Screen
+    //         navigation.navigate('Onboarding2')
+    //     }
+    // }, [progress, navigation])
 
     return (
         <SafeAreaView
@@ -109,7 +109,7 @@ const Onboarding1 = ({ navigation }) => {
                             bottom: 22,
                         }}
                     >
-                        <Button
+                        {/* <Button
                             title="Next"
                             filled
                             onPress={() => navigation.navigate('Onboarding2')}
@@ -117,9 +117,9 @@ const Onboarding1 = ({ navigation }) => {
                                 width: SIZES.width - 44,
                                 marginBottom: SIZES.padding,
                             }}
-                        />
+                        /> */}
                         <Button
-                            title="Skip"
+                            title="Main"
                             onPress={() => navigation.navigate('Main')}
                             style={{
                                 width: SIZES.width - 44,
