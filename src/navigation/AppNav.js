@@ -9,6 +9,7 @@ import AppNavigation from '../../navigations/AppNavigation'
 import AuthStack from './AuthStack'
 import { ActivityIndicator } from 'react-native'
 import { View } from 'react-native-animatable'
+import API from '../config'
 
 const AppNav = () => {
     const { isLoading, userToken } = useContext(AuthContext)
@@ -30,9 +31,22 @@ const AppNav = () => {
             </View>
         )
     }
+    ;(function () {
+        if (userToken) {
+            API.defaults.headers.common['Authorization'] = 'Bearer ' + userToken
+        } else {
+            API.defaults.headers.common['Authorization'] = ''
+        }
+        API.interceptors.response.use((response) => response)
+    })()
+
     return (
         <SafeAreaProvider onLayout={onLayoutRootView}>
-            {userToken !== null ? <AppNavigation /> : <AuthStack />}
+            {userToken !== null && userToken !== undefined ? (
+                <AppNavigation />
+            ) : (
+                <AuthStack />
+            )}
         </SafeAreaProvider>
     )
 }

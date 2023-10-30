@@ -1,23 +1,33 @@
 import 'react-native-gesture-handler'
-import { View, Text, Image } from 'react-native'
-import { Feather, Ionicons, AntDesign } from '@expo/vector-icons'
+import { View, Text } from 'react-native'
+import { Ionicons } from '@expo/vector-icons'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { DrawerItemList, createDrawerNavigator } from '@react-navigation/drawer'
-import { COLORS, images } from '../../constants'
-import {
-    Address,
-    Menu,
-    Notifications,
-    PaymentMethod,
-    Cart,
-    MyOrders,
-    HomeV1,
-    HomeV2,
-    Search,
-} from '../screens'
+import { COLORS } from '../../constants'
+import { Notifications, MyOrders, HomeV2, Search } from '../screens'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import React, { useEffect, useState } from 'react'
 
 const Drawer = createDrawerNavigator()
 const DrawerNavigation = () => {
+    const [fullName, setFullName] = useState(null)
+    const getUserInfo = async () => {
+        try {
+            let userInfo = await AsyncStorage.getItem('userInfo')
+            userInfo = JSON.parse(userInfo)
+            if (userInfo) {
+                setFullName(userInfo.fullName)
+            }
+        } catch (error) {
+            console.log(
+                '🚀 ~ file: AuthContext.js:28 ~ isLogin ~ error:',
+                error
+            )
+        }
+    }
+    useEffect(() => {
+        getUserInfo()
+    }, [])
     return (
         <Drawer.Navigator
             drawerContent={(props) => {
@@ -31,14 +41,6 @@ const DrawerNavigation = () => {
                                 alignItems: 'center',
                             }}
                         >
-                            <Image
-                                source={images.avatar2}
-                                style={{
-                                    height: 100,
-                                    width: 100,
-                                    borderRadius: 50,
-                                }}
-                            />
                             <Text
                                 style={{
                                     fontSize: 18,
@@ -47,16 +49,7 @@ const DrawerNavigation = () => {
                                     color: COLORS.black,
                                 }}
                             >
-                                Vishal Khadok
-                            </Text>
-                            <Text
-                                style={{
-                                    fontSize: 16,
-                                    color: COLORS.black,
-                                    fontFamily: 'regular',
-                                }}
-                            >
-                                Product Manager
+                                {fullName}
                             </Text>
                         </View>
                         <DrawerItemList {...props} />
@@ -130,53 +123,6 @@ const DrawerNavigation = () => {
                 }}
                 component={Search}
             />
-            <Drawer.Screen
-                name="Whishlist"
-                options={{
-                    drawerLabel: 'Wishlist',
-                    title: 'Wishlist',
-                    drawerIcon: () => (
-                        <Ionicons
-                            name="heart-outline"
-                            size={24}
-                            color={COLORS.black}
-                        />
-                    ),
-                }}
-                component={Cart}
-            />
-
-            <Drawer.Screen
-                name="Delivery Address"
-                options={{
-                    drawerLabel: 'Delivery Address',
-                    title: 'Delivery Address',
-                    drawerIcon: () => (
-                        <Ionicons
-                            name="location-outline"
-                            size={24}
-                            color={COLORS.black}
-                        />
-                    ),
-                }}
-                component={Address}
-            />
-
-            <Drawer.Screen
-                name="Payment Methods"
-                options={{
-                    drawerLabel: 'Payment Methods',
-                    title: 'Payment Methods',
-                    drawerIcon: () => (
-                        <AntDesign
-                            name="creditcard"
-                            size={24}
-                            color={COLORS.black}
-                        />
-                    ),
-                }}
-                component={PaymentMethod}
-            />
 
             <Drawer.Screen
                 name="Notifications"
@@ -192,22 +138,6 @@ const DrawerNavigation = () => {
                     ),
                 }}
                 component={Notifications}
-            />
-
-            <Drawer.Screen
-                name="Help"
-                options={{
-                    drawerLabel: 'Help',
-                    title: 'Help',
-                    drawerIcon: () => (
-                        <Feather
-                            name="help-circle"
-                            size={24}
-                            color={COLORS.black}
-                        />
-                    ),
-                }}
-                component={Menu}
             />
         </Drawer.Navigator>
     )

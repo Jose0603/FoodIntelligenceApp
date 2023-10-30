@@ -8,7 +8,7 @@ import {
     TouchableOpacity,
     FlatList,
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { COLORS, FONTS, SIZES, icons } from '../../constants'
 import {
     Feather,
@@ -22,12 +22,31 @@ import { ScrollView } from 'react-native-virtualized-view'
 import { StatusBar } from 'expo-status-bar'
 import { categories } from '../../data/categories'
 import { restaurants } from '../../data/restaurants'
-import CustomModal from '../components/CustomModal'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
+// import CustomModal from '../components/CustomModal'
 
 const HomeV2 = ({ navigation }) => {
     const [searchQuery, setSearchQuery] = useState('')
     const [modalVisible, setModalVisible] = useState(true)
-
+    const [fullName, setFullName] = useState(null)
+    const getUserInfo = async () => {
+        try {
+            let userInfo = await AsyncStorage.getItem('userInfo')
+            userInfo = JSON.parse(userInfo)
+            if (userInfo) {
+                setFullName(userInfo.fullName)
+            }
+        } catch (error) {
+            console.log(
+                '🚀 ~ file: AuthContext.js:28 ~ isLogin ~ error:',
+                error
+            )
+        }
+    }
+    useEffect(() => {
+        getUserInfo()
+    }, [])
     const handlePressGotIt = () => {
         // Handle the logic when the "GOT IT" button is pressed
         // For example, you can close the modal or perform any other action
@@ -182,7 +201,7 @@ const HomeV2 = ({ navigation }) => {
                         alignItems: 'center',
                     }}
                 >
-                    <Text style={{ ...FONTS.body2 }}>Open Restaurants</Text>
+                    <Text style={{ ...FONTS.body2 }}>Restaurantes</Text>
                     <TouchableOpacity
                         onPress={() => console.log('See all open restaurants')}
                         style={{ flexDirection: 'row', alignItems: 'center' }}
@@ -270,7 +289,7 @@ const HomeV2 = ({ navigation }) => {
                                         {item.rating}
                                     </Text>
                                 </View>
-                                <View
+                                {/* <View
                                     style={{
                                         flexDirection: 'row',
                                         alignItems: 'center',
@@ -285,11 +304,12 @@ const HomeV2 = ({ navigation }) => {
                                     <Text style={{ marginLeft: 8 }}>
                                         {item.shipping}
                                     </Text>
-                                </View>
-                                <View
+                                </View> */}
+                                {/* <View
                                     style={{
                                         flexDirection: 'row',
                                         alignItems: 'center',
+                                        marginHorizontal: SIZES.padding3,
                                     }}
                                 >
                                     <Fontisto
@@ -300,7 +320,7 @@ const HomeV2 = ({ navigation }) => {
                                     <Text style={{ marginLeft: 8 }}>
                                         {item.deliveryTime} min
                                     </Text>
-                                </View>
+                                </View> */}
                             </View>
                         </View>
                     )}
@@ -345,7 +365,7 @@ const HomeV2 = ({ navigation }) => {
                                 }}
                             />
                         </TouchableOpacity>
-                        <View
+                        {/* <View
                             style={{
                                 flexDirection: 'column',
                                 marginLeft: 12,
@@ -358,7 +378,7 @@ const HomeV2 = ({ navigation }) => {
                                     color: COLORS.primary,
                                 }}
                             >
-                                DELIVER TO
+                                DELIVER TO3
                             </Text>
                             <View
                                 style={{
@@ -383,7 +403,7 @@ const HomeV2 = ({ navigation }) => {
                                     }}
                                 />
                             </View>
-                        </View>
+                        </View> */}
                     </View>
 
                     <View
@@ -437,7 +457,7 @@ const HomeV2 = ({ navigation }) => {
                     }}
                 >
                     <Text style={{ fontSize: 16, fontFamily: 'regular' }}>
-                        Hey Halal,
+                        Hey {fullName},
                     </Text>
                     <Text style={{ fontSize: 16, fontFamily: 'bold' }}>
                         Good Afternoon!
@@ -445,16 +465,16 @@ const HomeV2 = ({ navigation }) => {
                 </View>
                 <ScrollView>
                     {renderSearchBar()}
-                    {renderFoodCategories()}
+                    {/* {renderFoodCategories()} */}
                     {renderRestaurants()}
                 </ScrollView>
             </View>
-            <CustomModal
+            {/* <CustomModal
                 modalVisible={modalVisible}
                 setModalVisible={setModalVisible}
                 onPressGotIt={handlePressGotIt}
                 code="#1243CD2"
-            />
+            /> */}
         </SafeAreaView>
     )
 }

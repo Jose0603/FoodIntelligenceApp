@@ -1,24 +1,22 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native'
-import React, { useState, useReducer, useEffect, useCallback } from 'react'
-import { COLORS, SIZES, icons, images } from '../../constants'
+import React, { useState, useReducer, useEffect } from 'react'
+import { COLORS, SIZES, icons } from '../../constants'
 import { useNavigation } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { commonStyles } from '../styles/CommonStyles'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { launchImagePicker } from '../utils/imagePickerHelper'
 import Input from '../components/Input'
 import Button from '../components/Button'
-import { validateInput } from '../utils/actions/formActions'
 import { reducer } from '../utils/reducers/formReducers'
-import { ScrollView } from 'react-native-virtualized-view'
 import { StatusBar } from 'expo-status-bar'
-
-const isTestMode = true
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Formik } from 'formik'
+import { UpdateUserInfo } from '../Services/UserInfo'
+import { useCustomToast } from '../hooks/useCustomToast'
 
 const initialState = {
     inputValues: {
-        fullName: isTestMode ? 'John Doe' : '',
-        email: isTestMode ? 'example@gmail.com' : '',
+        fullName: '',
+        email: '',
         phoneNumber: '',
         bio: '',
     },
@@ -32,35 +30,65 @@ const initialState = {
 }
 
 const EditProfile = () => {
-    const [image, setImage] = useState(null)
-    const [error, setError] = useState()
     const [formState, dispatchFormState] = useReducer(reducer, initialState)
+    const [firstName, setFirstName] = useState('')
+    const [lastName, setLastName] = useState('')
+    const [email, setEmail] = useState('')
+    const [id, setId] = useState('')
+    const [phoneNumber, setPhoneNumber] = useState('')
+    const [userInfoLoaded, setUserInfoLoaded] = useState(false)
+    const showToast = useCustomToast()
 
-    const inputChangedHandler = useCallback(
-        (inputId, inputValue) => {
-            const result = validateInput(inputId, inputValue)
-            dispatchFormState({ inputId, validationResult: result, inputValue })
-        },
-        [dispatchFormState]
-    )
-
-    useEffect(() => {
-        if (error) {
-            Alert.alert('An error occured', error)
-        }
-    }, [error])
-
-    const pickImage = async () => {
+    const getUserInfo = async () => {
         try {
-            const tempUri = await launchImagePicker()
-
-            if (!tempUri) return
-
-            // set the image
-            setImage({ uri: tempUri })
-        } catch (error) {}
+            let userInfo = await AsyncStorage.getItem('userInfo')
+            userInfo = JSON.parse(userInfo)
+            if (userInfo) {
+                setFirstName(userInfo.firstName)
+                setLastName(userInfo.lastName)
+                setId(userInfo.id)
+                setEmail(userInfo.email)
+                setPhoneNumber(userInfo.phoneNumber)
+            }
+            setUserInfoLoaded(true)
+        } catch (error) {
+            console.log(
+                '🚀 ~ file: AuthContext.js:28 ~ isLogin ~ error:',
+                error
+            )
+        }
     }
-
+    useEffect(() => {
+        getUserInfo()
+    }, [])
+    const submit = async (values, navigation) => {
+        try {
+            const res = await UpdateUserInfo(values)
+            if (res.success) {
+                showToast({
+                    title: 'Código enviado',
+                    status: 'success',
+                    description: res.message,
+                })
+                navigation.goBack()
+            }
+            //else {
+            //     showToast({
+            //         title: 'Código no enviado',
+            //         status: 'warning',
+            //         description: res.message,
+            //     })
+            // }
+        } catch (error) {
+            console.error(error)
+            showToast({
+                title: 'Ocurrio un error',
+                status: 'warning',
+                description:
+                    'Ocurrio un error al realizar la solicitud de cambio de contraseña',
+            })
+        }
+    }
     const renderHeader = () => {
         const navigation = useNavigation()
         return (
@@ -105,7 +133,7 @@ const EditProfile = () => {
         const navigation = useNavigation()
         return (
             <View style={{ flexDirection: 'column', alignItems: 'center' }}>
-                <View style={{ marginVertical: 12 }}>
+                {/* <View style={{ marginVertical: 12 }}>
                     <Image
                         source={image === null ? images.avatar2 : image}
                         resizeMode="contain"
@@ -135,55 +163,99 @@ const EditProfile = () => {
                             color={COLORS.white}
                         />
                     </TouchableOpacity>
-                </View>
-
+                </View> */}
                 <View
                     style={{
                         width: SIZES.width - 32,
                     }}
                 >
-                    <Text style={commonStyles.inputHeader}>Full Name</Text>
-                    <Input
-                        id="fullName"
-                        onInputChanged={inputChangedHandler}
-                        errorText={formState.inputValidities['fullName']}
-                        placeholder="John Doe"
-                        placeholderTextColor={COLORS.black}
-                    />
-                    <Text style={commonStyles.inputHeader}>Email</Text>
-                    <Input
-                        id="email"
-                        onInputChanged={inputChangedHandler}
-                        errorText={formState.inputValidities['email']}
-                        placeholder="example@gmail.com"
-                        placeholderTextColor={COLORS.black}
-                        keyboardType="email-address"
-                    />
-                    <Text style={commonStyles.inputHeader}>Phone Number</Text>
-                    <Input
-                        id="phoneNumber"
-                        onInputChanged={inputChangedHandler}
-                        errorText={formState.inputValidities['phoneNumber']}
-                        placeholder="111-111-111-222"
-                        placeholderTextColor={COLORS.black}
-                        keyboardType="numeric"
-                    />
-                    <Text style={commonStyles.inputHeader}>Bio</Text>
+                    <Formik
+                        initialValues={{
+                            firstName: firstName,
+                            lastName: lastName,
+                            email: email,
+                            phoneNumber: phoneNumber,
+                        }}
+                        onSubmit={(values) => {
+                            return submit({ id, ...values }, navigation)
+                        }}
+                    >
+                        {({
+                            handleChange,
+                            handleBlur,
+                            handleSubmit,
+                            values,
+                        }) => (
+                            <View>
+                                <Text style={commonStyles.inputHeader}>
+                                    Primer Nombre
+                                </Text>
+                                <Input
+                                    id="firstName"
+                                    value={values.firstName}
+                                    onChangeText={handleChange('firstName')}
+                                    errorText={
+                                        formState.inputValidities['firstName']
+                                    }
+                                />
+                                <Text style={commonStyles.inputHeader}>
+                                    Primer Apellido
+                                </Text>
+                                <Input
+                                    id="lastName"
+                                    value={values.lastName}
+                                    onChangeText={handleChange('lastName')}
+                                    errorText={
+                                        formState.inputValidities['lastName']
+                                    }
+                                />
+                                <Text style={commonStyles.inputHeader}>
+                                    Email
+                                </Text>
+                                <Input
+                                    id="email"
+                                    value={values.email}
+                                    onChangeText={handleChange('email')}
+                                    errorText={
+                                        formState.inputValidities['email']
+                                    }
+                                    placeholderTextColor={COLORS.black}
+                                    keyboardType="email-address"
+                                />
+                                <Text style={commonStyles.inputHeader}>
+                                    Phone Number
+                                </Text>
+                                <Input
+                                    value={values.phoneNumber}
+                                    onChangeText={handleChange('phoneNumber')}
+                                    id="phoneNumber"
+                                    errorText={
+                                        formState.inputValidities['phoneNumber']
+                                    }
+                                    placeholder="111-111-111-222"
+                                    placeholderTextColor={COLORS.black}
+                                    keyboardType="numeric"
+                                />
+                                <Button
+                                    title="SAVE"
+                                    filled
+                                    onPress={handleSubmit}
+                                    style={{
+                                        marginTop: 12,
+                                    }}
+                                />
+                            </View>
+                        )}
+                    </Formik>
+
+                    {/* <Text style={commonStyles.inputHeader}>Bio</Text>
                     <Input
                         id="bio"
                         onInputChanged={inputChangedHandler}
                         errorText={formState.inputValidities['bio']}
                         placeholder="I love fast food"
                         placeholderTextColor={COLORS.black}
-                    />
-                    <Button
-                        title="SAVE"
-                        filled
-                        onPress={() => navigation.navigate('PersonalProfile')}
-                        style={{
-                            marginTop: 12,
-                        }}
-                    />
+                    /> */}
                 </View>
             </View>
         )
@@ -199,7 +271,7 @@ const EditProfile = () => {
                 }}
             >
                 {renderHeader()}
-                <ScrollView>{renderEditProfileForm()}</ScrollView>
+                {userInfoLoaded ? renderEditProfileForm() : <View />}
             </View>
         </SafeAreaView>
     )

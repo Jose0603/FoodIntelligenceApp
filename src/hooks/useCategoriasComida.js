@@ -3,15 +3,15 @@ import { QueryKeys } from '../Helpers/QueryKeys'
 import { GetCategoriasComida } from '../Services/CategoriasComida'
 
 export function useCategoriasComida() {
-    const { data, isLoading, error, isFetching } = useQuery<any[], Error>(
+    const { data, isLoading, error, isFetching } = useQuery(
         [QueryKeys.CATEGORIASCOMIDA],
         () => GetCategoriasComida()
     )
 
     return {
-        attentionTypes: data ?? [],
-        isLoadingClinicAttentionTypes: isLoading,
+        categoriaComida: data ?? [],
+        isLoadingCategoriaComida: isLoading,
         error,
-        isFetchingAttentionTypes: isFetching,
+        isFetchingCategoriaComida: isFetching,
     }
 }

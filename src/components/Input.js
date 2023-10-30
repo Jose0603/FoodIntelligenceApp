@@ -3,10 +3,6 @@ import React from 'react'
 import { COLORS, SIZES } from '../../constants'
 
 const Input = (props) => {
-    const onChangeText = (text) => {
-        props.onInputChanged(props.id, text)
-    }
-
     return (
         <View style={styles.container}>
             <View
@@ -21,7 +17,6 @@ const Input = (props) => {
                 )}
                 <TextInput
                     {...props}
-                    onChangeText={onChangeText}
                     style={styles.input}
                     placeholder={props.placeholder}
                     placeholderTextColor={props.placeholderTextColor}

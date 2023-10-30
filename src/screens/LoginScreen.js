@@ -1,7 +1,14 @@
-import { View, Text, TouchableOpacity, Image } from 'react-native'
+import {
+    View,
+    Text,
+    TouchableOpacity,
+    Image,
+    TextInput,
+    StyleSheet,
+} from 'react-native'
 import React, { useState, useReducer, useEffect, useCallback } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { COLORS, FONTS } from '../../constants'
+import { COLORS, FONTS, SIZES } from '../../constants'
 import Checkbox from 'expo-checkbox'
 import * as Animatable from 'react-native-animatable'
 import Input from '../components/Input'
@@ -13,16 +20,17 @@ import { commonStyles } from '../styles/CommonStyles'
 import { StatusBar } from 'expo-status-bar'
 import { useContext } from 'react'
 import { AuthContext } from '../context/AuthContext'
+import { Formik } from 'formik'
 
 const isTestMode = true
 
 const initialState = {
     inputValues: {
-        email: isTestMode ? 'Jose0603' : '',
+        fullName: isTestMode ? 'Jose0603' : '',
         password: isTestMode ? 'Test1234*' : '',
     },
     inputValidities: {
-        email: false,
+        fullName: false,
         password: false,
     },
     formIsValid: false,
@@ -39,6 +47,7 @@ const LoginScreen = ({ navigation }) => {
     const inputChangedHandler = useCallback(
         (inputId, inputValue) => {
             const result = validateInput(inputId, inputValue)
+
             dispatchFormState({ inputId, validationResult: result, inputValue })
         },
         [dispatchFormState]
@@ -74,63 +83,74 @@ const LoginScreen = ({ navigation }) => {
                     Please sign in to your existing account
                 </Text>
             </View>
+
             <Animatable.View
                 animation="fadeInUpBig"
                 style={commonStyles.footer}
             >
-                <Text style={commonStyles.inputHeader}>Email</Text>
-                <Input
-                    id="email"
-                    onInputChanged={inputChangedHandler}
-                    errorText={formState.inputValidities['email']}
-                    placeholder=""
-                    placeholderTextColor={COLORS.black}
-                    keyboardType="email-address"
-                />
-                <Text style={commonStyles.inputHeader}>Password</Text>
-                <Input
-                    onInputChanged={inputChangedHandler}
-                    errorText={formState.inputValidities['password']}
-                    autoCapitalize="none"
-                    id="password"
-                    placeholder=""
-                    placeholderTextColor={COLORS.black}
-                    secureTextEntry={true}
-                />
-
-                <View style={commonStyles.checkBoxContainer}>
-                    <View
-                        style={{ flexDirection: 'row', alignItems: 'center' }}
-                    >
-                        <Checkbox
-                            style={commonStyles.checkbox}
-                            value={isChecked}
-                            color={isChecked ? COLORS.primary : COLORS.black}
-                            onValueChange={setChecked}
-                        />
-                        <Text style={{ ...FONTS.body4 }}>Remenber me</Text>
-                    </View>
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate('ForgotPassword')}
-                    >
-                        <Text style={{ ...FONTS.body4, color: COLORS.primary }}>
-                            Forgot Password ?
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-
-                <Button
-                    title="LOG IN"
-                    isLoading={isLoading}
-                    filled
-                    onPress={() =>
-                        login(
-                            formState.inputValues['email'],
-                            formState.inputValues['password']
-                        )
+                <Formik
+                    initialValues={{
+                        fullName: isTestMode ? 'Jose0603' : '',
+                        password: isTestMode ? 'Test1234*' : '',
+                    }}
+                    onSubmit={(values) =>
+                        login(values.fullName, values.password)
                     }
-                    style={commonStyles.btn}
-                />
+                >
+                    {({ handleChange, handleBlur, handleSubmit, values }) => (
+                        <View>
+                            <Text style={commonStyles.inputHeader}>
+                                UserName
+                            </Text>
+                            <Input
+                                id="fullName"
+                                value={values.fullName}
+                                onChangeText={handleChange('fullName')}
+                                placeholder=""
+                                placeholderTextColor={COLORS.black}
+                            />
+
+                            <Text style={commonStyles.inputHeader}>
+                                Password
+                            </Text>
+                            <Input
+                                id="password"
+                                value={values.password}
+                                onChangeText={handleChange('fullName')}
+                                errorText={
+                                    formState.inputValidities['password']
+                                }
+                                autoCapitalize="none"
+                                placeholder=""
+                                placeholderTextColor={COLORS.black}
+                                secureTextEntry={true}
+                            />
+                            <View style={commonStyles.checkBoxContainer}>
+                                <TouchableOpacity
+                                    onPress={() =>
+                                        navigation.navigate('ForgotPassword')
+                                    }
+                                >
+                                    <Text
+                                        style={{
+                                            ...FONTS.body4,
+                                            color: COLORS.primary,
+                                        }}
+                                    >
+                                        Forgot Password ?
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                            <Button
+                                title="LOG IN"
+                                isLoading={isLoading}
+                                filled
+                                onPress={handleSubmit}
+                            />
+                        </View>
+                    )}
+                </Formik>
+
                 <View style={commonStyles.center}>
                     <Text style={{ ...FONTS.body4, color: COLORS.black }}>
                         Don't have an account?{' '}
@@ -143,7 +163,7 @@ const LoginScreen = ({ navigation }) => {
                         </Text>
                     </TouchableOpacity>
                 </View>
-                <Text
+                {/* <Text
                     style={{
                         ...FONTS.body4,
                         color: COLORS.black,
@@ -151,9 +171,9 @@ const LoginScreen = ({ navigation }) => {
                     }}
                 >
                     Or
-                </Text>
+                </Text> */}
 
-                <View style={commonStyles.socialContainer}>
+                {/* <View style={commonStyles.socialContainer}>
                     <TouchableOpacity
                         onPress={facebookAuthHandler}
                         style={commonStyles.socialIconContainer}
@@ -184,7 +204,7 @@ const LoginScreen = ({ navigation }) => {
                             style={commonStyles.socialLogo}
                         />
                     </TouchableOpacity>
-                </View>
+                </View> */}
             </Animatable.View>
         </SafeAreaView>
     )

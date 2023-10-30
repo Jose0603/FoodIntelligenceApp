@@ -327,7 +327,7 @@ const HomeV1 = ({ navigation }) => {
                                     color: COLORS.primary,
                                 }}
                             >
-                                DELIVER TO
+                                DELIVER TO2
                             </Text>
                             <View
                                 style={{

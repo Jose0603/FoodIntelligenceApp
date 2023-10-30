@@ -227,7 +227,6 @@ const MessagesRoute = () => (
 )
 const renderScene = SceneMap({
     first: NotificationsRoute,
-    second: MessagesRoute,
 })
 
 const Notifications = ({ navigation }) => {
@@ -235,10 +234,7 @@ const Notifications = ({ navigation }) => {
 
     const [index, setIndex] = React.useState(0)
 
-    const [routes] = React.useState([
-        { key: 'first', title: 'Notifications' },
-        { key: 'second', title: 'Messages' },
-    ])
+    const [routes] = React.useState([{ key: 'first', title: 'Notifications' }])
 
     const renderTabBar = (props) => (
         <TabBar
