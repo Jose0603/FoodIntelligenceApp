@@ -13,7 +13,6 @@ import {
     ResetPassword,
     Onboarding4,
     LocationAccess,
-    HomeV1,
     FoodDetailsV1,
     FoodDetailsV2,
     RestaurantView1,
@@ -152,13 +151,7 @@ const AppNavigation = () => {
                         headerShown: false,
                     }}
                 />
-                <Stack.Screen
-                    name="HomeV1"
-                    component={HomeV1}
-                    options={{
-                        headerShown: false,
-                    }}
-                />
+
                 <Stack.Screen
                     name="Main"
                     component={BottomTabNavigation}

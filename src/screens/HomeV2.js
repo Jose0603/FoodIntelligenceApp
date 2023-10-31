@@ -23,7 +23,7 @@ import { StatusBar } from 'expo-status-bar'
 import { categories } from '../../data/categories'
 import { restaurants } from '../../data/restaurants'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-
+import { useRestaurantes } from '../hooks/useRestaurantes'
 // import CustomModal from '../components/CustomModal'
 
 const HomeV2 = ({ navigation }) => {
@@ -191,6 +191,8 @@ const HomeV2 = ({ navigation }) => {
     }
 
     const renderRestaurants = () => {
+        const { restaurantes, isLoadingRestaurantes } = useRestaurantes()
+
         return (
             <View style={{ height: 'auto' }}>
                 <View

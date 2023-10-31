@@ -9,9 +9,7 @@ import ResetPassword from './ResetPassword'
 import ForgotPassword from './ForgotPassword'
 import Verification from './Verification'
 import LocationAccess from './LocationAccess'
-import HomeV1 from './HomeV1'
 import HomeV2 from './HomeV2'
-import HomeV3 from './HomeV3'
 import FoodDetailsV1 from './FoodDetailsV1'
 import FoodDetailsV2 from './FoodDetailsV2'
 import RestaurantView1 from './RestaurantView1'
@@ -48,9 +46,7 @@ export {
     ForgotPassword,
     Verification,
     LocationAccess,
-    HomeV1,
     HomeV2,
-    HomeV3,
     FoodDetailsV1,
     FoodDetailsV2,
     RestaurantView1,

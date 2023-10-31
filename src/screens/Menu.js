@@ -10,7 +10,6 @@ import { StatusBar } from 'expo-status-bar'
 import { useContext } from 'react'
 import { AuthContext } from '../context/AuthContext'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { useCategoriasComida } from '../hooks/useCategoriasComida'
 
 const Menu = () => {
     const { logout } = useContext(AuthContext)
@@ -123,8 +122,7 @@ const Menu = () => {
 
     const renderSettings = () => {
         const navigation = useNavigation()
-        const { categoriaComida, isLoadingCategoriaComida } =
-            useCategoriasComida()
+
         return (
             <View style={{ flexDirection: 'column' }}>
                 <View style={styles.container}>
