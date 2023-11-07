@@ -9,7 +9,7 @@ export function useRestaurantes() {
     )
 
     return {
-        restaurantes: data ?? [],
+        restaurantes: data?.result?.data ?? [],
         isLoadingRestaurantes: isLoading,
         error,
         isFetchingRestaurantes: isFetching,

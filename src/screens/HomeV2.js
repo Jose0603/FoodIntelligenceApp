@@ -25,6 +25,7 @@ import { restaurants } from '../../data/restaurants'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useRestaurantes } from '../hooks/useRestaurantes'
 // import CustomModal from '../components/CustomModal'
+import { useNavigation } from '@react-navigation/native'
 
 const HomeV2 = ({ navigation }) => {
     const [searchQuery, setSearchQuery] = useState('')
@@ -192,7 +193,7 @@ const HomeV2 = ({ navigation }) => {
 
     const renderRestaurants = () => {
         const { restaurantes, isLoadingRestaurantes } = useRestaurantes()
-
+        const navigation = useNavigation()
         return (
             <View style={{ height: 'auto' }}>
                 <View
@@ -205,7 +206,7 @@ const HomeV2 = ({ navigation }) => {
                 >
                     <Text style={{ ...FONTS.body2 }}>Restaurantes</Text>
                     <TouchableOpacity
-                        onPress={() => console.log('See all open restaurants')}
+                        onPress={() => console.log('')}
                         style={{ flexDirection: 'row', alignItems: 'center' }}
                     >
                         <Text style={{ fontSize: 16, fontFamily: 'regular' }}>
@@ -220,78 +221,97 @@ const HomeV2 = ({ navigation }) => {
                         </View>
                     </TouchableOpacity>
                 </View>
-                <FlatList
-                    nestedScrollEnabled
-                    data={restaurants}
-                    keyExtractor={(item) => item.id}
-                    renderItem={({ item, index }) => (
-                        <View
-                            style={{
-                                width: SIZES.width - 32,
-                                borderColor: COLORS.tertiaryGray,
-                                borderWidth: 1,
-                                paddingBottom: 2,
-                                marginBottom: 12,
-                                borderRadius: 15,
-                            }}
-                        >
-                            <Image
-                                source={item.image}
-                                style={{
-                                    width: SIZES.width - 32,
-                                    height: 136,
-                                    borderRadius: 15,
-                                }}
-                            />
-                            <Text
-                                style={{
-                                    fontSize: 18,
-                                    fontFamily: 'regular',
-                                    marginVertical: 6,
-                                }}
-                            >
-                                {item.name}
-                            </Text>
-                            <View
-                                style={{
-                                    marginBottom: 4,
-                                    flexDirection: 'row',
-                                }}
-                            >
-                                {item.keywords.map((keyword, index) => (
-                                    <Text
-                                        key={index}
-                                        style={{
-                                            fontSize: 14,
-                                            color: COLORS.gray5,
-                                            textTransform: 'capitalize',
-                                        }}
-                                    >
-                                        {keyword}
-                                        {index !== item.keywords.length - 1
-                                            ? '-'
-                                            : ''}
-                                    </Text>
-                                ))}
-                            </View>
-
-                            <View style={{ flexDirection: 'row' }}>
+                {!isLoadingRestaurantes &&
+                    restaurantes != undefined &&
+                    restaurantes != null && (
+                        <FlatList
+                            nestedScrollEnabled
+                            data={restaurantes}
+                            keyExtractor={(item) => item.id}
+                            renderItem={({ item, index }) => (
                                 <View
                                     style={{
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
+                                        width: SIZES.width - 32,
+                                        borderColor: COLORS.tertiaryGray,
+                                        borderWidth: 1,
+                                        paddingBottom: 2,
+                                        marginBottom: 12,
+                                        borderRadius: 15,
                                     }}
                                 >
-                                    <Octicons
-                                        name="star"
-                                        size={24}
-                                        color={COLORS.primary}
-                                    />
-                                    <Text style={{ marginLeft: 8 }}>
+                                    <TouchableOpacity
+                                        onPress={() =>
+                                            navigation.navigate(
+                                                'RestaurantView',
+                                                {
+                                                    paramKey: item.id,
+                                                }
+                                            )
+                                        }
+                                        style={{
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                        }}
+                                    >
+                                        <Image
+                                            src={`data:image/jpeg;base64,${item.logoRestaurante}`}
+                                            style={{
+                                                width: SIZES.width - 32,
+                                                height: 136,
+                                                borderRadius: 15,
+                                            }}
+                                        />
+                                        <Text
+                                            style={{
+                                                fontSize: 18,
+                                                fontFamily: 'regular',
+                                                marginVertical: 6,
+                                            }}
+                                        >
+                                            {item.nombreRestaurante}
+                                        </Text>
+                                        <View
+                                            style={{
+                                                marginBottom: 4,
+                                                flexDirection: 'row',
+                                            }}
+                                        >
+                                            {/* {item.keywords.map((keyword, index) => (
+                                            <Text
+                                                key={index}
+                                                style={{
+                                                    fontSize: 14,
+                                                    color: COLORS.gray5,
+                                                    textTransform: 'capitalize',
+                                                }}
+                                            >
+                                                {keyword}
+                                                {index !==
+                                                item.keywords.length - 1
+                                                    ? '-'
+                                                    : ''}
+                                            </Text>
+                                        ))} */}
+                                        </View>
+                                    </TouchableOpacity>
+
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <View
+                                            style={{
+                                                flexDirection: 'row',
+                                                alignItems: 'center',
+                                            }}
+                                        >
+                                            <Octicons
+                                                name="star"
+                                                size={24}
+                                                color={COLORS.primary}
+                                            />
+                                            {/* <Text style={{ marginLeft: 8 }}>
                                         {item.rating}
-                                    </Text>
-                                </View>
-                                {/* <View
+                                    </Text> */}
+                                        </View>
+                                        {/* <View
                                     style={{
                                         flexDirection: 'row',
                                         alignItems: 'center',
@@ -307,7 +327,7 @@ const HomeV2 = ({ navigation }) => {
                                         {item.shipping}
                                     </Text>
                                 </View> */}
-                                {/* <View
+                                        {/* <View
                                     style={{
                                         flexDirection: 'row',
                                         alignItems: 'center',
@@ -323,10 +343,11 @@ const HomeV2 = ({ navigation }) => {
                                         {item.deliveryTime} min
                                     </Text>
                                 </View> */}
-                            </View>
-                        </View>
+                                    </View>
+                                </View>
+                            )}
+                        />
                     )}
-                />
             </View>
         )
     }
