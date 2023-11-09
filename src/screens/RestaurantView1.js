@@ -1,30 +1,15 @@
-import {
-    View,
-    Text,
-    Image,
-    TouchableOpacity,
-    FlatList,
-    StyleSheet,
-} from 'react-native'
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { COLORS, FONTS, SIZES, images, icons } from '../../constants'
 import { commonStyles } from '../styles/CommonStyles'
 import { useNavigation } from '@react-navigation/native'
 import { ScrollView } from 'react-native-virtualized-view'
-import {
-    MaterialCommunityIcons,
-    Octicons,
-    Fontisto,
-    AntDesign,
-    Ionicons,
-} from '@expo/vector-icons'
-import { recentKeywords } from '../../data/keywords'
-import { popularBurgers } from '../../data/foods'
+import { Octicons, AntDesign, Ionicons } from '@expo/vector-icons'
 import { Modal } from 'react-native'
-import { offers } from '../../data/utils'
 import Button from '../components/Button'
 import { StatusBar } from 'expo-status-bar'
+import { useComidas } from '../hooks/useComidas'
 
 const RestaurantView1 = ({ route, navigation }) => {
     const [modalVisible, setModalVisible] = useState(false)
@@ -195,11 +180,11 @@ const RestaurantView1 = ({ route, navigation }) => {
 
     const renderFoodsByCategories = () => {
         const navigation = useNavigation()
+        const [idRestaurante, setIdRestaurante] = useState(item.id)
+        const { comidas, isLoadingComidas } = useComidas(idRestaurante)
         return (
             <View>
-                <Text style={{ ...FONTS.body3, marginBottom: 12 }}>
-                    Burger (10){' '}
-                </Text>
+                <Text style={{ ...FONTS.body3, marginBottom: 12 }}></Text>
                 <View
                     style={{
                         flexDirection: 'row',
@@ -207,7 +192,7 @@ const RestaurantView1 = ({ route, navigation }) => {
                         width: SIZES.width - 32,
                     }}
                 >
-                    {popularBurgers.map((item, index) => (
+                    {comidas.map((item, index) => (
                         <TouchableOpacity
                             onPress={() => navigation.navigate('FoodDetails')}
                             key={index}
@@ -225,7 +210,7 @@ const RestaurantView1 = ({ route, navigation }) => {
                             }}
                         >
                             <Image
-                                source={item.image}
+                                src={`data:image/jpeg;base64,${item.imagenComida}`}
                                 resizeMode="contain"
                                 style={{
                                     width: '100%',
@@ -233,6 +218,7 @@ const RestaurantView1 = ({ route, navigation }) => {
                                     borderRadius: 15,
                                 }}
                             />
+
                             <Text
                                 style={{
                                     fontSize: 14,
@@ -240,9 +226,9 @@ const RestaurantView1 = ({ route, navigation }) => {
                                     marginVertical: 4,
                                 }}
                             >
-                                {item.name}
+                                {item.nombre}
                             </Text>
-                            <Text
+                            {/* <Text
                                 style={{
                                     fontSize: 13,
                                     fontFamily: 'regular',
@@ -250,7 +236,7 @@ const RestaurantView1 = ({ route, navigation }) => {
                                 }}
                             >
                                 {item.restaurant}
-                            </Text>
+                            </Text> */}
                             <View
                                 style={{
                                     flexDirection: 'row',
@@ -261,7 +247,7 @@ const RestaurantView1 = ({ route, navigation }) => {
                                 <Text
                                     style={{ fontSize: 15, fontFamily: 'bold' }}
                                 >
-                                    ${item.price}
+                                    L. {item.precio}
                                 </Text>
                                 <TouchableOpacity
                                     onPress={() => console.log('Add to cart')}
