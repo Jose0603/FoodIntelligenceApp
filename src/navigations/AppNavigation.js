@@ -16,7 +16,6 @@ import {
     FoodDetailsV1,
     FoodDetailsV2,
     RestaurantView1,
-    RestaurantView2,
     FoodByKeywords,
     Cart,
     EditCart,

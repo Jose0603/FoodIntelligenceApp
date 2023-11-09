@@ -244,7 +244,7 @@ const HomeV2 = ({ navigation }) => {
                                             navigation.navigate(
                                                 'RestaurantView',
                                                 {
-                                                    paramKey: item.id,
+                                                    item: item,
                                                 }
                                             )
                                         }

@@ -13,7 +13,6 @@ import HomeV2 from './HomeV2'
 import FoodDetailsV1 from './FoodDetailsV1'
 import FoodDetailsV2 from './FoodDetailsV2'
 import RestaurantView1 from './RestaurantView1'
-import RestaurantView2 from './RestaurantView2'
 import Search from './Search'
 import Notifications from './Notifications'
 import FoodByKeywords from './FoodByKeywords'
@@ -50,7 +49,6 @@ export {
     FoodDetailsV1,
     FoodDetailsV2,
     RestaurantView1,
-    RestaurantView2,
     Search,
     Notifications,
     FoodByKeywords,

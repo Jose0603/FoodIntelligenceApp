@@ -26,9 +26,9 @@ import { offers } from '../../data/utils'
 import Button from '../components/Button'
 import { StatusBar } from 'expo-status-bar'
 
-const RestaurantView1 = () => {
+const RestaurantView1 = ({ route, navigation }) => {
     const [modalVisible, setModalVisible] = useState(false)
-
+    const { item } = route.params
     const renderHeader = () => {
         const navigation = useNavigation()
         return (
@@ -62,10 +62,10 @@ const RestaurantView1 = () => {
                             fontFamily: 'regular',
                         }}
                     >
-                        Restaurant View
+                        {item.nombreRestaurante}
                     </Text>
                 </View>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     onPress={() => setModalVisible(true)}
                     style={commonStyles.header1Icon}
                 >
@@ -78,7 +78,7 @@ const RestaurantView1 = () => {
                             tintColor: COLORS.black,
                         }}
                     />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
         )
     }
@@ -88,8 +88,7 @@ const RestaurantView1 = () => {
         return (
             <View style={{ marginTop: 16 }}>
                 <Image
-                    //  source={images.restaurants}
-                    source={images.restaurant4}
+                    src={`data:image/jpeg;base64,${item.logoRestaurante}`}
                     resizeMode="contain"
                     style={{
                         width: SIZES.width - 32,
@@ -106,9 +105,9 @@ const RestaurantView1 = () => {
                         marginVertical: 10,
                     }}
                 >
-                    Spicy Restaurant
+                    {item.nombreRestaurante}
                 </Text>
-                <Text
+                {/* <Text
                     style={{
                         fontSize: 13,
                         fontFamily: 'regular',
@@ -118,7 +117,7 @@ const RestaurantView1 = () => {
                     Maecenas sed diam eget risus varius blandit sit amet non
                     magna. Integer posuere erat a ante venenatis dapibus posuere
                     velit aliquet.
-                </Text>
+                </Text> */}
                 <View style={{ flexDirection: 'row', marginTop: 16 }}>
                     <View
                         style={{ flexDirection: 'row', alignItems: 'center' }}
@@ -130,7 +129,7 @@ const RestaurantView1 = () => {
                         />
                         <Text style={{ marginLeft: 8 }}>4.7</Text>
                     </View>
-                    <View
+                    {/* <View
                         style={{
                             flexDirection: 'row',
                             alignItems: 'center',
@@ -153,11 +152,11 @@ const RestaurantView1 = () => {
                             color={COLORS.primary}
                         />
                         <Text style={{ marginLeft: 8 }}>20 min</Text>
-                    </View>
+                    </View> */}
                 </View>
                 {/* Render Keyword related to restaurants */}
                 <View style={{ marginVertical: 16 }}>
-                    <FlatList
+                    {/* <FlatList
                         horizontal={true}
                         data={recentKeywords}
                         keyExtractor={(item) => item.id}
@@ -188,7 +187,7 @@ const RestaurantView1 = () => {
                                 </Text>
                             </TouchableOpacity>
                         )}
-                    />
+                    /> */}
                 </View>
             </View>
         )
