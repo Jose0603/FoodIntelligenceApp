@@ -1,47 +1,26 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Alert, Text, TouchableOpacity } from 'react-native'
 import React, { useState, useReducer, useEffect, useCallback } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { COLORS, SIZES } from '../../constants'
 import * as Animatable from 'react-native-animatable'
 import Input from '../components/Input'
 import Button from '../components/Button'
-import { validateInput } from '../utils/actions/formActions'
-import { reducer } from '../utils/reducers/formReducers'
 import { commonStyles } from '../styles/CommonStyles'
 import { StatusBar } from 'expo-status-bar'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { MaterialIcons } from '@expo/vector-icons'
+import { Formik } from 'formik'
+import { ResetPasswordService } from '../Services/UserInfo'
 
-const isTestMode = true
-
-const initialState = {
-    inputValues: {
-        password: isTestMode ? '**********' : '',
-        confirmPassword: isTestMode ? '**********' : '',
-    },
-    inputValidities: {
-        password: false,
-        confirmPassword: false,
-    },
-    formIsValid: false,
-}
-
-const ResetPassword = ({ navigation }) => {
+const ResetPassword = ({ route, navigation }) => {
+    const { email } = route.params
     const [error, setError] = useState()
     const [isLoading, setIsLoading] = useState(false)
-    const [formState, dispatchFormState] = useReducer(reducer, initialState)
-
-    const inputChangedHandler = useCallback(
-        (inputId, inputValue) => {
-            const result = validateInput(inputId, inputValue)
-            dispatchFormState({ inputId, validationResult: result, inputValue })
-        },
-        [dispatchFormState]
-    )
 
     useEffect(() => {
         if (error) {
-            Alert.alert('An error occured', error)
+            Alert.alert('Ocurrio un error!', error)
+            setError(null)
         }
     }, [error])
 
@@ -59,9 +38,9 @@ const ResetPassword = ({ navigation }) => {
                         color={COLORS.black}
                     />
                 </TouchableOpacity>
-                <Text style={commonStyles.headerTitle}>Reset Password</Text>
+                <Text style={commonStyles.headerTitle}>Nueva Contraseña</Text>
                 <Text style={commonStyles.subHeaderTitle}>
-                    Please reset your password to get started
+                    Ingrese su nueva contraseña
                 </Text>
             </View>
             <Animatable.View
@@ -69,36 +48,72 @@ const ResetPassword = ({ navigation }) => {
                 style={commonStyles.footer}
             >
                 <KeyboardAwareScrollView>
-                    <Text style={commonStyles.inputHeader}>Password</Text>
-                    <Input
-                        onInputChanged={inputChangedHandler}
-                        errorText={formState.inputValidities['password']}
-                        autoCapitalize="none"
-                        id="password"
-                        placeholder="*************"
-                        placeholderTextColor={COLORS.black}
-                        secureTextEntry={true}
-                    />
+                    <Formik
+                        initialValues={{
+                            email: email,
+                            password: '',
+                            confirmPassword: '',
+                        }}
+                        onSubmit={async (values) => {
+                            try {
+                                if (values.password != values.confirmPassword)
+                                    return setError('Contraseña no coinciden.')
+                                const res = await ResetPasswordService(values)
+                                if (res.status == 200)
+                                    navigation.navigate('Login')
+                            } catch (error) {
+                                setError(
+                                    'Error al guardar la nueva contraseña.' +
+                                        ' Por seguridad se recomienda crear contraseñas que contengan caracteres en mayúsculas y minúsculas, números y símbolos'
+                                )
+                            }
 
-                    <Text style={commonStyles.inputHeader}>
-                        Re-Type Password
-                    </Text>
-                    <Input
-                        onInputChanged={inputChangedHandler}
-                        errorText={formState.inputValidities['passwordConfirm']}
-                        autoCapitalize="none"
-                        id="passwordConfirm"
-                        placeholder="*************"
-                        placeholderTextColor={COLORS.black}
-                        secureTextEntry={true}
-                    />
-                    <Button
-                        title="RESET"
-                        isLoading={isLoading}
-                        filled
-                        onPress={() => navigation.navigate('Login')}
-                        style={commonStyles.btn1}
-                    />
+                            return
+                        }}
+                    >
+                        {({
+                            handleChange,
+                            handleBlur,
+                            handleSubmit,
+                            values,
+                        }) => (
+                            <View>
+                                <Text style={commonStyles.inputHeader}>
+                                    Contraseña
+                                </Text>
+                                <Input
+                                    id="password"
+                                    value={values.password}
+                                    onChangeText={handleChange('password')}
+                                    placeholder=""
+                                    placeholderTextColor={COLORS.black}
+                                    secureTextEntry={true}
+                                />
+
+                                <Text style={commonStyles.inputHeader}>
+                                    Confirmar Contraseña
+                                </Text>
+                                <Input
+                                    id="confirmPassword"
+                                    value={values.confirmPassword}
+                                    onChangeText={handleChange(
+                                        'confirmPassword'
+                                    )}
+                                    placeholder=""
+                                    placeholderTextColor={COLORS.black}
+                                    secureTextEntry={true}
+                                />
+
+                                <Button
+                                    onPress={handleSubmit}
+                                    title="Guardar"
+                                    isLoading={isLoading}
+                                    filled
+                                    style={commonStyles.btn1}
+                                />
+                            </View>
+                        )}
+                    </Formik>
                 </KeyboardAwareScrollView>
             </Animatable.View>
         </SafeAreaView>

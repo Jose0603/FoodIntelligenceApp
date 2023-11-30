@@ -41,7 +41,8 @@ const AddPaymentCard = ({ navigation }) => {
 
     useEffect(() => {
         if (error) {
-            Alert.alert('An error occured', error)
+            Alert.alert('Ocurrio un error!', error)
+            setError(null)
         }
     }, [error])
     const renderHeader = () => {

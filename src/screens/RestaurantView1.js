@@ -194,7 +194,11 @@ const RestaurantView1 = ({ route, navigation }) => {
                 >
                     {comidas.map((item, index) => (
                         <TouchableOpacity
-                            onPress={() => navigation.navigate('FoodDetails')}
+                            onPress={() =>
+                                navigation.navigate('FoodDetails', {
+                                    comida: item,
+                                })
+                            }
                             key={index}
                             style={{
                                 flexDirection: 'column',

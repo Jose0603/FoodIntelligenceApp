@@ -1,44 +1,24 @@
-import { View, Text, TouchableOpacity } from 'react-native'
-import React, { useState, useReducer, useEffect, useCallback } from 'react'
+import { Alert, View, Text, TouchableOpacity } from 'react-native'
+import React, { useState, useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { COLORS } from '../../constants'
 import * as Animatable from 'react-native-animatable'
 import Input from '../components/Input'
 import Button from '../components/Button'
-import { validateInput } from '../utils/actions/formActions'
-import { reducer } from '../utils/reducers/formReducers'
 import { commonStyles } from '../styles/CommonStyles'
 import { StatusBar } from 'expo-status-bar'
 import { MaterialIcons } from '@expo/vector-icons'
-
-const isTestMode = true
-
-const initialState = {
-    inputValues: {
-        email: isTestMode ? 'example@gmail.com' : '',
-    },
-    inputValidities: {
-        email: false,
-    },
-    formIsValid: false,
-}
+import { Formik } from 'formik'
+import { SendVerificationCode } from '../Services/UserInfo'
 
 const ForgotPassword = ({ navigation }) => {
     const [error, setError] = useState()
     const [isLoading, setIsLoading] = useState(false)
-    const [formState, dispatchFormState] = useReducer(reducer, initialState)
-
-    const inputChangedHandler = useCallback(
-        (inputId, inputValue) => {
-            const result = validateInput(inputId, inputValue)
-            dispatchFormState({ inputId, validationResult: result, inputValue })
-        },
-        [dispatchFormState]
-    )
 
     useEffect(() => {
         if (error) {
-            Alert.alert('An error occured', error)
+            Alert.alert('Ocurrio un error!', error)
+            setError(null)
         }
     }, [error])
 
@@ -56,31 +36,55 @@ const ForgotPassword = ({ navigation }) => {
                         color={COLORS.black}
                     />
                 </TouchableOpacity>
-                <Text style={commonStyles.headerTitle}>Forgot Password</Text>
+                <Text style={commonStyles.headerTitle}>
+                    Olvide mi contraseña
+                </Text>
                 <Text style={commonStyles.subHeaderTitle}>
-                    Please provide to your existing email
+                    Ingrese el correo asociado.
                 </Text>
             </View>
             <Animatable.View
                 animation="fadeInUpBig"
                 style={commonStyles.footer}
             >
-                <Text style={commonStyles.inputHeader}>Email</Text>
-                <Input
-                    id="email"
-                    onInputChanged={inputChangedHandler}
-                    errorText={formState.inputValidities['email']}
-                    placeholder="example@gmail.com"
-                    placeholderTextColor={COLORS.black}
-                    keyboardType="email-address"
-                />
-                <Button
-                    title="SEND CODE"
-                    isLoading={isLoading}
-                    filled
-                    onPress={() => navigation.navigate('Verification')}
-                    style={commonStyles.btn1}
-                />
+                <Formik
+                    initialValues={{
+                        email: '',
+                    }}
+                    onSubmit={async (values) => {
+                        try {
+                            const res = await SendVerificationCode(values)
+                            if (res.status == 200)
+                                navigation.navigate('Verification', {
+                                    values: values,
+                                })
+                        } catch (error) {
+                            setError('Correo no encontrado.')
+                        }
+
+                        return
+                    }}
+                >
+                    {({ handleChange, handleBlur, handleSubmit, values }) => (
+                        <View>
+                            <Text style={commonStyles.inputHeader}>Correo</Text>
+                            <Input
+                                id="email"
+                                value={values.email}
+                                onChangeText={handleChange('email')}
+                                placeholder=""
+                                placeholderTextColor={COLORS.black}
+                            />
+                            <Button
+                                title="Enviar Código"
+                                isLoading={isLoading}
+                                filled
+                                style={commonStyles.btn1}
+                                onPress={handleSubmit}
+                            />
+                        </View>
+                    )}
+                </Formik>
             </Animatable.View>
         </SafeAreaView>
     )

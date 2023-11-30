@@ -15,7 +15,8 @@ import Button from '../components/Button'
 import { StatusBar } from 'expo-status-bar'
 
 const ingridents = [icons.salt, icons.chickenLeg, icons.onion, icons.chili]
-const FoodDetailsV1 = () => {
+const FoodDetailsV1 = ({ route, navigation }) => {
+    const { comida } = route.params
     const renderHeader = () => {
         const navigation = useNavigation()
         return (
@@ -47,7 +48,7 @@ const FoodDetailsV1 = () => {
                         fontFamily: 'regular',
                     }}
                 >
-                    Details
+                    Detalle
                 </Text>
             </View>
         )
@@ -55,7 +56,7 @@ const FoodDetailsV1 = () => {
 
     const renderFoodDetails = () => {
         const [isFavourite, setIsFavourite] = useState(false)
-        const [quantity, setQuantity] = useState(2)
+        const [quantity, setQuantity] = useState(0)
         const navigation = useNavigation()
 
         const [selectedSize, setSelectedSize] = useState(null)
@@ -92,8 +93,7 @@ const FoodDetailsV1 = () => {
                         />
                     </TouchableOpacity>
                     <Image
-                        // source={images.food}
-                        source={images.burger3}
+                        src={`data:image/jpeg;base64,${comida.imagenComida}`}
                         resizeMode="contain"
                         style={{
                             width: SIZES.width - 32,
@@ -106,7 +106,7 @@ const FoodDetailsV1 = () => {
                 </View>
                 {/* Food details infos */}
                 <View style={{ marginVertical: 16 }}>
-                    <View
+                    {/* <View
                         style={{
                             flexDirection: 'row',
                             height: 47,
@@ -135,7 +135,7 @@ const FoodDetailsV1 = () => {
                         >
                             Uttora Coffe House
                         </Text>
-                    </View>
+                    </View> */}
                     <Text
                         style={{
                             fontSize: 18,
@@ -144,7 +144,7 @@ const FoodDetailsV1 = () => {
                             marginVertical: 10,
                         }}
                     >
-                        pizza calzone european
+                        {comida.nombre}
                     </Text>
                     <Text
                         style={{
@@ -153,8 +153,7 @@ const FoodDetailsV1 = () => {
                             color: COLORS.gray5,
                         }}
                     >
-                        Prosciutto e funghi is a pizza variety that is topped
-                        with tomato sauce.
+                        {comida.descripcion}
                     </Text>
 
                     <View style={{ flexDirection: 'row', marginTop: 16 }}>
@@ -171,7 +170,7 @@ const FoodDetailsV1 = () => {
                             />
                             <Text style={{ marginLeft: 8 }}>4.7</Text>
                         </View>
-                        <View
+                        {/* <View
                             style={{
                                 flexDirection: 'row',
                                 alignItems: 'center',
@@ -197,10 +196,10 @@ const FoodDetailsV1 = () => {
                                 color={COLORS.primary}
                             />
                             <Text style={{ marginLeft: 8 }}>20 min</Text>
-                        </View>
+                        </View> */}
                     </View>
 
-                    <View
+                    {/* <View
                         style={{
                             flexDirection: 'row',
                             alignItems: 'center',
@@ -274,9 +273,9 @@ const FoodDetailsV1 = () => {
                                 </Text>
                             </TouchableOpacity>
                         </View>
-                    </View>
+                    </View> */}
 
-                    <View>
+                    {/* <View>
                         <Text
                             style={{
                                 fontSize: 14,
@@ -314,7 +313,7 @@ const FoodDetailsV1 = () => {
                                 </View>
                             ))}
                         </View>
-                    </View>
+                    </View> */}
 
                     <View
                         style={{
@@ -334,7 +333,7 @@ const FoodDetailsV1 = () => {
                             <Text
                                 style={{ fontSize: 28, fontFamily: 'regular' }}
                             >
-                                $32
+                                L. {comida.precio}
                             </Text>
                             <View
                                 style={{

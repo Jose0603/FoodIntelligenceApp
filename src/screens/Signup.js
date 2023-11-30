@@ -1,51 +1,24 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Alert, Text, TouchableOpacity } from 'react-native'
 import React, { useState, useReducer, useEffect, useCallback } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { COLORS } from '../../constants'
+import { COLORS, FONTS, SIZES } from '../../constants'
 import * as Animatable from 'react-native-animatable'
 import Input from '../components/Input'
 import Button from '../components/Button'
-import { validateInput } from '../utils/actions/formActions'
-import { reducer } from '../utils/reducers/formReducers'
 import { commonStyles } from '../styles/CommonStyles'
 import { StatusBar } from 'expo-status-bar'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { MaterialIcons } from '@expo/vector-icons'
-
-const isTestMode = true
-
-const initialState = {
-    inputValues: {
-        fullName: isTestMode ? 'John Doe' : '',
-        email: isTestMode ? 'example@gmail.com' : '',
-        password: isTestMode ? '**********' : '',
-        confirmPassword: isTestMode ? '**********' : '',
-    },
-    inputValidities: {
-        fullName: false,
-        email: false,
-        password: false,
-        confirmPassword: false,
-    },
-    formIsValid: false,
-}
-
+import { Formik } from 'formik'
+import { Registration } from '../Services/UserInfo'
 const Signup = ({ navigation }) => {
     const [error, setError] = useState()
     const [isLoading, setIsLoading] = useState(false)
-    const [formState, dispatchFormState] = useReducer(reducer, initialState)
-
-    const inputChangedHandler = useCallback(
-        (inputId, inputValue) => {
-            const result = validateInput(inputId, inputValue)
-            dispatchFormState({ inputId, validationResult: result, inputValue })
-        },
-        [dispatchFormState]
-    )
 
     useEffect(() => {
         if (error) {
-            Alert.alert('An error occured', error)
+            Alert.alert('Ocurrio un error!', error)
+            setError(null)
         }
     }, [error])
 
@@ -63,64 +36,138 @@ const Signup = ({ navigation }) => {
                         color={COLORS.black}
                     />
                 </TouchableOpacity>
-                <Text style={commonStyles.headerTitle}>Sign up</Text>
-                <Text style={commonStyles.subHeaderTitle}>
+                <Text style={commonStyles.headerTitle}>Registrate</Text>
+                {/* <Text style={commonStyles.subHeaderTitle}>
                     Please sign up to get started
-                </Text>
+                </Text> */}
             </View>
             <Animatable.View
                 animation="fadeInUpBig"
                 style={commonStyles.footer}
             >
                 <KeyboardAwareScrollView>
-                    <Text style={commonStyles.inputHeader}>Name</Text>
-                    <Input
-                        id="fullName"
-                        onInputChanged={inputChangedHandler}
-                        errorText={formState.inputValidities['fullName']}
-                        placeholder="John Doe"
-                        placeholderTextColor={COLORS.black}
-                    />
-                    <Text style={commonStyles.inputHeader}>Email</Text>
-                    <Input
-                        id="email"
-                        onInputChanged={inputChangedHandler}
-                        errorText={formState.inputValidities['email']}
-                        placeholder="example@gmail.com"
-                        placeholderTextColor={COLORS.black}
-                        keyboardType="email-address"
-                    />
-                    <Text style={commonStyles.inputHeader}>Password</Text>
-                    <Input
-                        onInputChanged={inputChangedHandler}
-                        errorText={formState.inputValidities['password']}
-                        autoCapitalize="none"
-                        id="password"
-                        placeholder="*************"
-                        placeholderTextColor={COLORS.black}
-                        secureTextEntry={true}
-                    />
+                    <Formik
+                        initialValues={{
+                            firstName: '',
+                            lastName: '',
+                            username: '',
+                            email: '',
+                            password: '',
+                            confirmPassword: '',
+                            phoneNumber: '',
+                        }}
+                        onSubmit={async (values) => {
+                            try {
+                                if (values.password != values.confirmPassword)
+                                    return setError('Contraseña no coinciden.')
+                                const res = await Registration(values)
+                                if (res.status == 201)
+                                    navigation.navigate('Login')
+                            } catch (error) {
+                                setError(
+                                    'Error al guardar la nueva contraseña.' +
+                                        ' Por seguridad se recomienda crear contraseñas que contengan caracteres en mayúsculas y minúsculas, números y símbolos'
+                                )
+                            }
 
-                    <Text style={commonStyles.inputHeader}>
-                        Re-Type Password
-                    </Text>
-                    <Input
-                        onInputChanged={inputChangedHandler}
-                        errorText={formState.inputValidities['passwordConfirm']}
-                        autoCapitalize="none"
-                        id="passwordConfirm"
-                        placeholder="*************"
-                        placeholderTextColor={COLORS.black}
-                        secureTextEntry={true}
-                    />
+                            return
+                        }}
+                    >
+                        {({
+                            handleChange,
+                            handleBlur,
+                            handleSubmit,
+                            values,
+                        }) => (
+                            <View>
+                                <Text style={commonStyles.inputHeader}>
+                                    Nombres
+                                </Text>
+                                <Input
+                                    id="firstName"
+                                    value={values.firstName}
+                                    onChangeText={handleChange('firstName')}
+                                    placeholder=""
+                                    placeholderTextColor={COLORS.black}
+                                />
+                                <Text style={commonStyles.inputHeader}>
+                                    Apellidos
+                                </Text>
+                                <Input
+                                    id="lastName"
+                                    value={values.lastName}
+                                    onChangeText={handleChange('lastName')}
+                                    placeholder=""
+                                    placeholderTextColor={COLORS.black}
+                                />
+                                <Text style={commonStyles.inputHeader}>
+                                    Usuario
+                                </Text>
+                                <Input
+                                    id="username"
+                                    value={values.username}
+                                    onChangeText={handleChange('username')}
+                                    placeholder=""
+                                    placeholderTextColor={COLORS.black}
+                                />
+                                <Text style={commonStyles.inputHeader}>
+                                    Email
+                                </Text>
+                                <Input
+                                    id="email"
+                                    value={values.email}
+                                    onChangeText={handleChange('email')}
+                                    placeholder=""
+                                    placeholderTextColor={COLORS.black}
+                                />
 
-                    <Button
-                        title="SIGN UP"
-                        isLoading={isLoading}
-                        filled
-                        onPress={() => navigation.navigate('Signup')}
-                        style={commonStyles.btn1}
-                    />
+                                <Text style={commonStyles.inputHeader}>
+                                    Numero de Telefono
+                                </Text>
+                                <Input
+                                    id="phoneNumber"
+                                    value={values.phoneNumber}
+                                    onChangeText={handleChange('phoneNumber')}
+                                    placeholder=""
+                                    placeholderTextColor={COLORS.black}
+                                />
+
+                                <Text style={commonStyles.inputHeader}>
+                                    Contraseña
+                                </Text>
+                                <Input
+                                    id="password"
+                                    value={values.password}
+                                    onChangeText={handleChange('password')}
+                                    placeholder=""
+                                    placeholderTextColor={COLORS.black}
+                                    secureTextEntry={true}
+                                />
+
+                                <Text style={commonStyles.inputHeader}>
+                                    Confirmar Contraseña
+                                </Text>
+                                <Input
+                                    id="confirmPassword"
+                                    value={values.confirmPassword}
+                                    onChangeText={handleChange(
+                                        'confirmPassword'
+                                    )}
+                                    placeholder=""
+                                    placeholderTextColor={COLORS.black}
+                                    secureTextEntry={true}
+                                />
+
+                                <Button
+                                    onPress={handleSubmit}
+                                    title="SIGN UP"
+                                    isLoading={isLoading}
+                                    filled
+                                    style={commonStyles.btn1}
+                                />
+                            </View>
+                        )}
+                    </Formik>
                 </KeyboardAwareScrollView>
             </Animatable.View>
         </SafeAreaView>

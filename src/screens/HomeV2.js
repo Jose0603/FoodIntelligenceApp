@@ -209,7 +209,7 @@ const HomeV2 = ({ navigation }) => {
                         onPress={() => console.log('')}
                         style={{ flexDirection: 'row', alignItems: 'center' }}
                     >
-                        <Text style={{ fontSize: 16, fontFamily: 'regular' }}>
+                        {/* <Text style={{ fontSize: 16, fontFamily: 'regular' }}>
                             See All
                         </Text>
                         <View>
@@ -218,7 +218,7 @@ const HomeV2 = ({ navigation }) => {
                                 size={24}
                                 color={COLORS.gray4}
                             />
-                        </View>
+                        </View> */}
                     </TouchableOpacity>
                 </View>
                 {!isLoadingRestaurantes &&
@@ -261,38 +261,6 @@ const HomeV2 = ({ navigation }) => {
                                                 borderRadius: 15,
                                             }}
                                         />
-                                        <Text
-                                            style={{
-                                                fontSize: 18,
-                                                fontFamily: 'regular',
-                                                marginVertical: 6,
-                                            }}
-                                        >
-                                            {item.nombreRestaurante}
-                                        </Text>
-                                        <View
-                                            style={{
-                                                marginBottom: 4,
-                                                flexDirection: 'row',
-                                            }}
-                                        >
-                                            {/* {item.keywords.map((keyword, index) => (
-                                            <Text
-                                                key={index}
-                                                style={{
-                                                    fontSize: 14,
-                                                    color: COLORS.gray5,
-                                                    textTransform: 'capitalize',
-                                                }}
-                                            >
-                                                {keyword}
-                                                {index !==
-                                                item.keywords.length - 1
-                                                    ? '-'
-                                                    : ''}
-                                            </Text>
-                                        ))} */}
-                                        </View>
                                     </TouchableOpacity>
 
                                     <View style={{ flexDirection: 'row' }}>
@@ -307,42 +275,19 @@ const HomeV2 = ({ navigation }) => {
                                                 size={24}
                                                 color={COLORS.primary}
                                             />
-                                            {/* <Text style={{ marginLeft: 8 }}>
-                                        {item.rating}
-                                    </Text> */}
+                                            <Text style={{ marginLeft: 8 }}>
+                                                {item.rating}{' '}
+                                            </Text>
                                         </View>
-                                        {/* <View
-                                    style={{
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        marginHorizontal: SIZES.padding3,
-                                    }}
-                                >
-                                    <MaterialCommunityIcons
-                                        name="truck-delivery-outline"
-                                        size={24}
-                                        color={COLORS.primary}
-                                    />
-                                    <Text style={{ marginLeft: 8 }}>
-                                        {item.shipping}
-                                    </Text>
-                                </View> */}
-                                        {/* <View
-                                    style={{
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        marginHorizontal: SIZES.padding3,
-                                    }}
-                                >
-                                    <Fontisto
-                                        name="stopwatch"
-                                        size={22}
-                                        color={COLORS.primary}
-                                    />
-                                    <Text style={{ marginLeft: 8 }}>
-                                        {item.deliveryTime} min
-                                    </Text>
-                                </View> */}
+                                        <Text
+                                            style={{
+                                                fontSize: 18,
+                                                fontFamily: 'regular',
+                                                marginVertical: 6,
+                                            }}
+                                        >
+                                            {item.nombreRestaurante}
+                                        </Text>
                                     </View>
                                 </View>
                             )}

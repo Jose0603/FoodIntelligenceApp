@@ -100,7 +100,7 @@ const LoginScreen = ({ navigation }) => {
                     {({ handleChange, handleBlur, handleSubmit, values }) => (
                         <View>
                             <Text style={commonStyles.inputHeader}>
-                                UserName
+                                Usuario
                             </Text>
                             <Input
                                 id="fullName"
@@ -111,12 +111,12 @@ const LoginScreen = ({ navigation }) => {
                             />
 
                             <Text style={commonStyles.inputHeader}>
-                                Password
+                                Contraseña
                             </Text>
                             <Input
                                 id="password"
                                 value={values.password}
-                                onChangeText={handleChange('fullName')}
+                                onChangeText={handleChange('password')}
                                 errorText={
                                     formState.inputValidities['password']
                                 }
@@ -137,7 +137,7 @@ const LoginScreen = ({ navigation }) => {
                                             color: COLORS.primary,
                                         }}
                                     >
-                                        Forgot Password ?
+                                        Olvido su contraseña?
                                     </Text>
                                 </TouchableOpacity>
                             </View>
@@ -153,13 +153,13 @@ const LoginScreen = ({ navigation }) => {
 
                 <View style={commonStyles.center}>
                     <Text style={{ ...FONTS.body4, color: COLORS.black }}>
-                        Don't have an account?{' '}
+                        No tienes cuenta?{' '}
                     </Text>
                     <TouchableOpacity
                         onPress={() => navigation.navigate('Signup')}
                     >
                         <Text style={{ ...FONTS.body4, color: COLORS.primary }}>
-                            SIGN UP
+                            Registrate
                         </Text>
                     </TouchableOpacity>
                 </View>
