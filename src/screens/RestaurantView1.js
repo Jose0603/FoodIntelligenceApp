@@ -112,7 +112,7 @@ const RestaurantView1 = ({ route, navigation }) => {
                             size={24}
                             color={COLORS.primary}
                         />
-                        <Text style={{ marginLeft: 8 }}>4.7</Text>
+                        <Text style={{ marginLeft: 8 }}>{item.rating}</Text>
                     </View>
                     {/* <View
                         style={{

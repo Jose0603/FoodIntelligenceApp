@@ -41,7 +41,7 @@ const Search = ({ navigation }) => {
                     <Ionicons name="search" size={24} color={COLORS.gray4} />
                 </View>
                 <TextInput
-                    placeholder="Search dishes, restaurants"
+                    placeholder="Search restaurants"
                     onChangeText={handleSearch}
                     placeholderTextColor={COLORS.gray5}
                 />

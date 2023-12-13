@@ -24,7 +24,7 @@ export const categories = [
     },
     {
         id: 4,
-        name: 'Burger',
+        name: 'Hamburguesas',
         // image: images.category,
         image: images.burger2,
         startingPrice: 100,

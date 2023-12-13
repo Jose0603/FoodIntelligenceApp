@@ -8,7 +8,8 @@ import {
     TouchableOpacity,
     FlatList,
 } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useReducer, useState } from 'react'
+import { reducer } from '../utils/reducers/formReducers'
 import { COLORS, FONTS, SIZES, icons } from '../../constants'
 import {
     Feather,
@@ -26,10 +27,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useRestaurantes } from '../hooks/useRestaurantes'
 // import CustomModal from '../components/CustomModal'
 import { useNavigation } from '@react-navigation/native'
+import { Formik } from 'formik'
+import { commonStyles } from '../styles/CommonStyles'
+import Input from '../components/Input'
 
 const HomeV2 = ({ navigation }) => {
     const [searchQuery, setSearchQuery] = useState('')
     const [modalVisible, setModalVisible] = useState(true)
+
     const [fullName, setFullName] = useState(null)
     const getUserInfo = async () => {
         try {
@@ -169,7 +174,7 @@ const HomeV2 = ({ navigation }) => {
                 style={{
                     width: SIZES.width - 32,
                     height: 62,
-                    borderRadius: 10,
+                    borderRadius: 1,
                     backgroundColor: COLORS.tertiaryGray,
                     alignItems: 'center',
                     flexDirection: 'row',
@@ -182,11 +187,29 @@ const HomeV2 = ({ navigation }) => {
                 >
                     <Ionicons name="search" size={24} color={COLORS.gray4} />
                 </View>
-                <TextInput
-                    placeholder="Search dishes, restaurants"
-                    onChangeText={handleSearch}
-                    placeholderTextColor={COLORS.gray5}
-                />
+                {/* <Formik
+                    initialValues={{
+                        firstName: '',
+                    }}
+                    onSubmit={(values) => {
+                        return submit({ id, ...values }, navigation)
+                    }}
+                >
+                    {({ handleChange, handleBlur, handleSubmit, values }) => (
+                        <View>
+                            <TextInput
+                                onChangeText={handleSearch}
+                                placeholderTextColor={COLORS.gray5}
+                            />
+                            <Input
+                                placeholder="Search restaurants"
+                                id="firstName"
+                                value={values.firstName}
+                                onChangeText={handleChange('firstName')}
+                            />
+                        </View>
+                    )}
+                </Formik> */}
             </View>
         )
     }
@@ -425,10 +448,10 @@ const HomeV2 = ({ navigation }) => {
                     }}
                 >
                     <Text style={{ fontSize: 16, fontFamily: 'regular' }}>
-                        Hey {fullName},
+                        Hola {fullName},
                     </Text>
                     <Text style={{ fontSize: 16, fontFamily: 'bold' }}>
-                        Good Afternoon!
+                        Buen Provecho!
                     </Text>
                 </View>
                 <ScrollView>
