@@ -9,10 +9,11 @@ import Input from '../components/Input'
 import Button from '../components/Button'
 import { cartData } from '../../data/utils'
 import { StatusBar } from 'expo-status-bar'
+import { usePedido } from '../hooks/usePedido'
 
 const Cart = ({ navigation }) => {
     const [quantity, setQuantity] = useState(1)
-
+    const { comidas, isLoadingComidas } = usePedido()
     const decreaseQuantity = () => {
         if (quantity > 1) {
             setQuantity(quantity - 1)
@@ -60,10 +61,10 @@ const Cart = ({ navigation }) => {
                                 color: COLORS.white,
                             }}
                         >
-                            Cart
+                            Carrito
                         </Text>
                     </View>
-                    <TouchableOpacity onPress={() => console.log('Edit Items')}>
+                    {/* <TouchableOpacity onPress={() => console.log('Edit Items')}>
                         <Text
                             style={{
                                 fontSize: 14,
@@ -74,11 +75,11 @@ const Cart = ({ navigation }) => {
                         >
                             Done
                         </Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
 
                 <FlatList
-                    data={cartData}
+                    data={comidas.detallesPedido}
                     keyExtractor={(item) => item.id}
                     renderItem={({ item, index }) => {
                         return (
@@ -88,8 +89,7 @@ const Cart = ({ navigation }) => {
                             >
                                 <View style={{ marginRight: 2, width: 120 }}>
                                     <Image
-                                        // source={images.food}
-                                        source={item.image}
+                                        src={`data:image/jpeg;base64,${item.idcomidaNavigationImagenComida}`}
                                         resizeMode="contain"
                                         style={{
                                             height: 120,
@@ -123,7 +123,7 @@ const Cart = ({ navigation }) => {
                                                 marginRight: 20,
                                             }}
                                         >
-                                            {item.name}
+                                            {item.idcomidaNavigationNombre}
                                         </Text>
                                         <TouchableOpacity
                                             onPress={() =>
@@ -159,7 +159,7 @@ const Cart = ({ navigation }) => {
                                             marginVertical: 6,
                                         }}
                                     >
-                                        ${item.price}
+                                        L. {item.precioUnitario}
                                     </Text>
                                     <View
                                         style={{
@@ -167,7 +167,7 @@ const Cart = ({ navigation }) => {
                                             justifyContent: 'space-between',
                                         }}
                                     >
-                                        <Text
+                                        {/* <Text
                                             style={{
                                                 fontSize: 16,
                                                 color: COLORS.white,
@@ -175,7 +175,7 @@ const Cart = ({ navigation }) => {
                                             }}
                                         >
                                             {item.size}"
-                                        </Text>
+                                        </Text> */}
                                         <View
                                             style={{
                                                 flexDirection: 'row',
@@ -198,7 +198,7 @@ const Cart = ({ navigation }) => {
                                                     marginHorizontal: 12,
                                                 }}
                                             >
-                                                {quantity}
+                                                {item.cantidad}
                                             </Text>
                                             <TouchableOpacity
                                                 onPress={increaseQuantity}
@@ -217,7 +217,7 @@ const Cart = ({ navigation }) => {
                 />
             </View>
             <Animatable.View animation="fadeInUpBig" style={cartStyles.footer}>
-                <View
+                {/* <View
                     style={{
                         flexDirection: 'row',
                         justifyContent: 'space-between',
@@ -236,7 +236,7 @@ const Cart = ({ navigation }) => {
                     placeholder="2118 Thornridge Cir. Syracuse"
                     placeholderTextColor={COLORS.gray4}
                     editable={false}
-                />
+                /> */}
 
                 <View
                     style={{
@@ -260,7 +260,7 @@ const Cart = ({ navigation }) => {
                             $90
                         </Text>
                     </View>
-                    <View
+                    {/* <View
                         style={{ flexDirection: 'row', alignItems: 'center' }}
                     >
                         <Text style={cartStyles.body3Color}>Breakdown</Text>
@@ -274,7 +274,7 @@ const Cart = ({ navigation }) => {
                                 }}
                             />
                         </View>
-                    </View>
+                    </View> */}
                 </View>
 
                 <Button

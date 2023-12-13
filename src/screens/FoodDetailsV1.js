@@ -13,6 +13,7 @@ import {
 import { ScrollView } from 'react-native-virtualized-view'
 import Button from '../components/Button'
 import { StatusBar } from 'expo-status-bar'
+import { addItem } from '../Services/PedidosService'
 
 const ingridents = [icons.salt, icons.chickenLeg, icons.onion, icons.chili]
 const FoodDetailsV1 = ({ route, navigation }) => {
@@ -56,18 +57,26 @@ const FoodDetailsV1 = ({ route, navigation }) => {
 
     const renderFoodDetails = () => {
         const [isFavourite, setIsFavourite] = useState(false)
-        const [quantity, setQuantity] = useState(0)
+        const [quantity, setQuantity] = useState(1)
         const navigation = useNavigation()
 
         const [selectedSize, setSelectedSize] = useState(null)
         const handleSizeSelection = (size) => {
             setSelectedSize(size)
         }
+        const onAddItem = async (values) => {
+            try {
+                const response = await addItem(values)
+                if (response.status == 200) navigation.navigate('Cart')
+            } catch (error) {
+                setError('Error al guardar el platillo.')
+            }
+        }
         return (
             <View style={{ marginVertical: 16 }}>
                 {/* Food details images */}
                 <View>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                         onPress={() => setIsFavourite(!isFavourite)}
                         style={{
                             position: 'absolute',
@@ -91,7 +100,7 @@ const FoodDetailsV1 = ({ route, navigation }) => {
                             size={24}
                             color={isFavourite ? COLORS.primary : COLORS.white}
                         />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     <Image
                         src={`data:image/jpeg;base64,${comida.imagenComida}`}
                         resizeMode="contain"
@@ -349,7 +358,7 @@ const FoodDetailsV1 = ({ route, navigation }) => {
                             >
                                 <TouchableOpacity
                                     onPress={() => {
-                                        if (quantity > 2) {
+                                        if (quantity > 0) {
                                             setQuantity(quantity - 1)
                                         }
                                     }}
@@ -395,8 +404,14 @@ const FoodDetailsV1 = ({ route, navigation }) => {
                         </View>
                         <Button
                             filled
-                            onPress={() => navigation.navigate('Cart')}
-                            title="ADD TO CART"
+                            onPress={() =>
+                                onAddItem({
+                                    idComida: comida.id,
+                                    cantidad: quantity,
+                                })
+                            }
+                            // onPress={() => navigation.navigate('Cart')}
+                            title="Agregar"
                         />
                     </View>
                 </View>
