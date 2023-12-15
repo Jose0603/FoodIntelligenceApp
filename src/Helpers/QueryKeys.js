@@ -3,4 +3,5 @@ export const QueryKeys = {
     RESTAURANTES: 'restaurantes',
     COMIDAS: 'comidas',
     PEDIDO: 'pedido',
+    PEDIDOS: 'pedidos',
 }

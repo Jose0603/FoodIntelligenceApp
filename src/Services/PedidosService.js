@@ -14,6 +14,13 @@ export const getCurrentPedido = async () => {
 
     return data
 }
+
+export const getAllPedidos = async () => {
+    const { data } = await API.get(`/Pedidos`)
+
+    return data
+}
+
 export const deleteDetallePedido = async (id) => {
     return await API.put(`/DetallesPedidos?id=${id}`)
 }

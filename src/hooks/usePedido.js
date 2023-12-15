@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query'
 import { QueryKeys } from '../Helpers/QueryKeys'
-import { getCurrentPedido } from '../Services/PedidosService'
+import { getCurrentPedido, getAllPedidos } from '../Services/PedidosService'
 
 export function usePedido() {
     const { data, isLoading, error, isFetching, refetch } = useQuery(

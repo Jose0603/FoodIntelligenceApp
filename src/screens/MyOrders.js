@@ -5,7 +5,7 @@ import {
     Image,
     useWindowDimensions,
 } from 'react-native'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { COLORS, icons } from '../../constants'
 import { useNavigation } from '@react-navigation/native'
@@ -14,314 +14,331 @@ import { TabView, SceneMap, TabBar } from 'react-native-tab-view'
 import { FlatList } from 'react-native'
 import { history, orders } from '../../data/utils'
 import { StatusBar } from 'expo-status-bar'
+import { useAllPedidos } from '../hooks/usePedido'
 
-const OngoingRoute = () => (
-    <View style={{ flex: 1 }}>
-        <FlatList
-            data={orders}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item, index }) => (
-                <View style={{ flexDirection: 'column' }}>
-                    <View
-                        style={{
-                            borderBottomColor: COLORS.gray,
-                            borderBottomWidth: 1,
-                            marginVertical: 12,
-                            paddingBottom: 4,
-                        }}
-                    >
-                        <Text style={{ fontSize: 14, fontFamily: 'bold' }}>
-                            {item.type}
-                        </Text>
-                    </View>
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                        }}
-                    >
+const OngoingRoute = () => {
+    const { allPedidos, isLoadingAllPedidoss } = useAllPedidos()
+    const ongoingOrders = allPedidos.filter(
+        (order) => order.estadoPedido === 'Preparación'
+    )
+    return (
+        <View style={{ flex: 1 }}>
+            <FlatList
+                data={ongoingOrders}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item, index }) => (
+                    <View style={{ flexDirection: 'column' }}>
+                        <View
+                            style={{
+                                borderBottomColor: COLORS.gray,
+                                borderBottomWidth: 1,
+                                marginVertical: 12,
+                                paddingBottom: 4,
+                            }}
+                        >
+                            <Text style={{ fontSize: 14, fontFamily: 'bold' }}>
+                                Orden
+                            </Text>
+                        </View>
                         <View
                             style={{
                                 flexDirection: 'row',
-                                alignItems: 'center',
+                                justifyContent: 'space-between',
                             }}
                         >
-                            <Image
-                                source={item.image}
+                            <View
                                 style={{
-                                    height: 60,
-                                    width: 60,
-                                    borderRadius: 8,
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
                                 }}
-                            />
-                            <View style={{ marginLeft: 12 }}>
-                                <Text
+                            >
+                                <Image
+                                    src={`data:image/jpeg;base64,${item.restauranteImagen}`}
                                     style={{
-                                        fontSize: 14,
-                                        fontWeight: 'bold',
+                                        height: 60,
+                                        width: 60,
+                                        borderRadius: 8,
                                     }}
-                                >
-                                    {item.name}
-                                </Text>
-                                <View
-                                    style={{
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        marginTop: 4,
-                                    }}
-                                >
+                                />
+                                <View style={{ marginLeft: 12 }}>
                                     <Text
                                         style={{
                                             fontSize: 14,
-                                            fontFamily: 'bold',
+                                            fontWeight: 'bold',
                                         }}
                                     >
-                                        ${item.price}
+                                        {item.restauranteName}
                                     </Text>
-                                    <Text
+                                    <View
                                         style={{
-                                            fontSize: 12,
-                                            fontFamily: 'regular',
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            marginTop: 4,
                                         }}
                                     >
-                                        {' '}
-                                        | {item.numberOfItems} Items
-                                    </Text>
+                                        <Text
+                                            style={{
+                                                fontSize: 14,
+                                                fontFamily: 'bold',
+                                            }}
+                                        >
+                                            L. {item.montoTotal}
+                                        </Text>
+                                        <Text
+                                            style={{
+                                                fontSize: 12,
+                                                fontFamily: 'regular',
+                                            }}
+                                        >
+                                            {' '}
+                                            | {item.cantidadTotal} Artículos
+                                        </Text>
+                                    </View>
                                 </View>
                             </View>
+                            <Text
+                                style={{
+                                    fontSize: 14,
+                                    textDecorationLine: 'underline',
+                                    textDecorationColor: COLORS.gray5,
+                                    fontFamily: 'regular',
+                                }}
+                            >
+                                #{item.id}
+                            </Text>
                         </View>
-                        <Text
-                            style={{
-                                fontSize: 14,
-                                textDecorationLine: 'underline',
-                                textDecorationColor: COLORS.gray5,
-                                fontFamily: 'regular',
-                            }}
-                        >
-                            {item.receipt}
-                        </Text>
-                    </View>
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            marginVertical: 18,
-                        }}
-                    >
-                        <TouchableOpacity
-                            style={{
-                                height: 38,
-                                width: 140,
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                backgroundColor: COLORS.primary,
-                                borderRadius: 8,
-                            }}
-                        >
-                            <Text
-                                style={{
-                                    color: COLORS.white,
-                                    fontSize: 14,
-                                    fontFamily: 'regular',
-                                }}
-                            >
-                                Track Order
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={{
-                                height: 38,
-                                width: 140,
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                backgroundColor: COLORS.white,
-                                borderColor: COLORS.primary,
-                                borderWidth: 1,
-                                borderRadius: 8,
-                            }}
-                        >
-                            <Text
-                                style={{
-                                    color: COLORS.primary,
-                                    fontSize: 14,
-                                    fontFamily: 'regular',
-                                }}
-                            >
-                                Track Order
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            )}
-        />
-    </View>
-)
-
-const HistoryRoute = () => (
-    <View style={{ flex: 1 }}>
-        <FlatList
-            data={history}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item, index }) => (
-                <View style={{ flexDirection: 'column' }}>
-                    <View
-                        style={{
-                            borderBottomColor: COLORS.gray,
-                            borderBottomWidth: 1,
-                            marginVertical: 12,
-                            flexDirection: 'row',
-                            paddingBottom: 4,
-                        }}
-                    >
-                        <Text style={{ fontSize: 14, fontFamily: 'bold' }}>
-                            {item.type}
-                        </Text>
-                        <Text
-                            style={{
-                                fontSize: 14,
-                                fontFamily: 'bold',
-                                color:
-                                    item.status == 'Completed'
-                                        ? COLORS.green
-                                        : COLORS.red,
-                                marginLeft: 12,
-                            }}
-                        >
-                            {item.status}
-                        </Text>
-                    </View>
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                        }}
-                    >
                         <View
                             style={{
                                 flexDirection: 'row',
-                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                marginVertical: 18,
                             }}
                         >
-                            <Image
-                                source={item.image}
+                            <TouchableOpacity
                                 style={{
-                                    height: 60,
-                                    width: 60,
+                                    height: 38,
+                                    width: 140,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    backgroundColor: COLORS.primary,
                                     borderRadius: 8,
                                 }}
-                            />
-                            <View style={{ marginLeft: 12 }}>
+                            >
                                 <Text
                                     style={{
+                                        color: COLORS.white,
                                         fontSize: 14,
-                                        fontWeight: 'bold',
+                                        fontFamily: 'regular',
                                     }}
                                 >
-                                    {item.name}
+                                    Ver Detalles
                                 </Text>
-                                <View
+                            </TouchableOpacity>
+                            {/* <TouchableOpacity
+                                style={{
+                                    height: 38,
+                                    width: 140,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    backgroundColor: COLORS.white,
+                                    borderColor: COLORS.primary,
+                                    borderWidth: 1,
+                                    borderRadius: 8,
+                                }}
+                            >
+                                <Text
                                     style={{
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        marginTop: 4,
+                                        color: COLORS.primary,
+                                        fontSize: 14,
+                                        fontFamily: 'regular',
                                     }}
                                 >
+                                    Track Order
+                                </Text>
+                            </TouchableOpacity> */}
+                        </View>
+                    </View>
+                )}
+            />
+        </View>
+    )
+}
+
+const HistoryRoute = () => {
+    const { allPedidos, isLoadingAllPedidoss } = useAllPedidos()
+    const restOrder = allPedidos.filter(
+        (order) => order.estadoPedido != 'Preparación'
+    )
+    return (
+        <View style={{ flex: 1 }}>
+            <FlatList
+                data={restOrder}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item, index }) => (
+                    <View style={{ flexDirection: 'column' }}>
+                        <View
+                            style={{
+                                borderBottomColor: COLORS.gray,
+                                borderBottomWidth: 1,
+                                marginVertical: 12,
+                                flexDirection: 'row',
+                                paddingBottom: 4,
+                            }}
+                        >
+                            <Text style={{ fontSize: 14, fontFamily: 'bold' }}>
+                                Orden
+                            </Text>
+                            <Text
+                                style={{
+                                    fontSize: 14,
+                                    fontFamily: 'bold',
+                                    color:
+                                        item.estadoPedido == 'Completado'
+                                            ? COLORS.green
+                                            : item.estadoPedido == 'Cancelado'
+                                            ? COLORS.red
+                                            : COLORS.yellow,
+                                    marginLeft: 12,
+                                }}
+                            >
+                                {item.estadoPedido}
+                            </Text>
+                        </View>
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                            }}
+                        >
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <Image
+                                    src={`data:image/jpeg;base64,${item.restauranteImagen}`}
+                                    style={{
+                                        height: 60,
+                                        width: 60,
+                                        borderRadius: 8,
+                                    }}
+                                />
+                                <View style={{ marginLeft: 12 }}>
                                     <Text
                                         style={{
                                             fontSize: 14,
-                                            fontFamily: 'bold',
+                                            fontWeight: 'bold',
                                         }}
                                     >
-                                        ${item.price}
+                                        {item.restauranteName}
                                     </Text>
-                                    <Text
+                                    <View
                                         style={{
-                                            fontSize: 12,
-                                            fontFamily: 'regular',
-                                            marginHorizontal: 2,
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            marginTop: 4,
                                         }}
                                     >
-                                        {' '}
-                                        | {item.date}
-                                    </Text>
-                                    <Text
-                                        style={{
-                                            fontSize: 12,
-                                            fontFamily: 'regular',
-                                        }}
-                                    >
-                                        {' '}
-                                        | {item.numberOfItems} Items
-                                    </Text>
+                                        <Text
+                                            style={{
+                                                fontSize: 14,
+                                                fontFamily: 'bold',
+                                            }}
+                                        >
+                                            L. {item.montoTotal}
+                                        </Text>
+                                        <Text
+                                            style={{
+                                                fontSize: 12,
+                                                fontFamily: 'regular',
+                                                marginHorizontal: 2,
+                                            }}
+                                        >
+                                            {' '}
+                                            | {item.fechaHoraPedido}
+                                        </Text>
+                                        <Text
+                                            style={{
+                                                fontSize: 12,
+                                                fontFamily: 'regular',
+                                            }}
+                                        >
+                                            {' '}
+                                            | {item.cantidadTotal} Artículos
+                                        </Text>
+                                    </View>
                                 </View>
                             </View>
+                            <Text
+                                style={{
+                                    fontSize: 14,
+                                    textDecorationLine: 'underline',
+                                    textDecorationColor: COLORS.gray5,
+                                    fontFamily: 'regular',
+                                }}
+                            >
+                                #{item.id}
+                            </Text>
                         </View>
-                        <Text
+                        <View
                             style={{
-                                fontSize: 14,
-                                textDecorationLine: 'underline',
-                                textDecorationColor: COLORS.gray5,
-                                fontFamily: 'regular',
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                marginVertical: 18,
                             }}
                         >
-                            {item.receipt}
-                        </Text>
-                    </View>
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            marginVertical: 18,
-                        }}
-                    >
-                        <TouchableOpacity
-                            style={{
-                                height: 38,
-                                width: 140,
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                backgroundColor: COLORS.white,
-                                borderColor: COLORS.primary,
-                                borderWidth: 1,
-                                borderRadius: 8,
-                            }}
-                        >
-                            <Text
+                            {item.estadoPedido != 'Cancelado' && (
+                                <TouchableOpacity
+                                    style={{
+                                        height: 38,
+                                        width: 140,
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        backgroundColor: COLORS.white,
+                                        borderColor: COLORS.primary,
+                                        borderWidth: 1,
+                                        borderRadius: 8,
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            color: COLORS.primary,
+                                            fontSize: 14,
+                                            fontFamily: 'regular',
+                                        }}
+                                    >
+                                        Calificanos
+                                    </Text>
+                                </TouchableOpacity>
+                            )}
+                            <TouchableOpacity
                                 style={{
-                                    color: COLORS.primary,
-                                    fontSize: 14,
-                                    fontFamily: 'regular',
+                                    height: 38,
+                                    width: 140,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    backgroundColor: COLORS.primary,
+                                    borderRadius: 8,
                                 }}
                             >
-                                Rate
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={{
-                                height: 38,
-                                width: 140,
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                backgroundColor: COLORS.primary,
-                                borderRadius: 8,
-                            }}
-                        >
-                            <Text
-                                style={{
-                                    color: COLORS.white,
-                                    fontSize: 14,
-                                    fontFamily: 'regular',
-                                }}
-                            >
-                                Re-Order
-                            </Text>
-                        </TouchableOpacity>
+                                <Text
+                                    style={{
+                                        color: COLORS.white,
+                                        fontSize: 14,
+                                        fontFamily: 'regular',
+                                    }}
+                                >
+                                    Detalles
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                </View>
-            )}
-        />
-    </View>
-)
+                )}
+            />
+        </View>
+    )
+}
 
 const renderScene = SceneMap({
     first: OngoingRoute,
@@ -391,7 +408,7 @@ const MyOrders = ({ navigation }) => {
                         My Orders
                     </Text>
                 </View>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     onPress={() => console.log('Pressed')}
                     style={commonStyles.header1Icon}
                 >
@@ -404,7 +421,7 @@ const MyOrders = ({ navigation }) => {
                             tintColor: COLORS.black,
                         }}
                     />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
         )
     }

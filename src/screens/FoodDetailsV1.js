@@ -14,10 +14,15 @@ import { ScrollView } from 'react-native-virtualized-view'
 import Button from '../components/Button'
 import { StatusBar } from 'expo-status-bar'
 import { addItem } from '../Services/PedidosService'
+import { usePedido } from '../hooks/usePedido'
+import CustomModal from '../components/CustomModal'
 
 const ingridents = [icons.salt, icons.chickenLeg, icons.onion, icons.chili]
 const FoodDetailsV1 = ({ route, navigation }) => {
     const { comida } = route.params
+    const [quantity, setQuantity] = useState(1)
+    const [modalVisible, setModalVisible] = useState(false)
+    const { pedidos, refetchPedidos } = usePedido()
     const renderHeader = () => {
         const navigation = useNavigation()
         return (
@@ -55,23 +60,33 @@ const FoodDetailsV1 = ({ route, navigation }) => {
         )
     }
 
+    const onAddItem = async (values) => {
+        try {
+            const response = await addItem(values)
+            if (response.status == 200) {
+                refetchPedidos()
+                navigation.navigate('Cart')
+            }
+        } catch (error) {
+            setError('Error al guardar el platillo.')
+        }
+    }
+    const handlePressGotIt = () => {
+        setModalVisible(false)
+        onAddItem({
+            idComida: comida.id,
+            cantidad: quantity,
+        })
+    }
     const renderFoodDetails = () => {
         const [isFavourite, setIsFavourite] = useState(false)
-        const [quantity, setQuantity] = useState(1)
         const navigation = useNavigation()
 
         const [selectedSize, setSelectedSize] = useState(null)
         const handleSizeSelection = (size) => {
             setSelectedSize(size)
         }
-        const onAddItem = async (values) => {
-            try {
-                const response = await addItem(values)
-                if (response.status == 200) navigation.navigate('Cart')
-            } catch (error) {
-                setError('Error al guardar el platillo.')
-            }
-        }
+
         return (
             <View style={{ marginVertical: 16 }}>
                 {/* Food details images */}
@@ -404,12 +419,19 @@ const FoodDetailsV1 = ({ route, navigation }) => {
                         </View>
                         <Button
                             filled
-                            onPress={() =>
-                                onAddItem({
-                                    idComida: comida.id,
-                                    cantidad: quantity,
-                                })
-                            }
+                            onPress={() => {
+                                if (
+                                    pedidos.restauranteId ==
+                                    comida.idrestaurante
+                                ) {
+                                    onAddItem({
+                                        idComida: comida.id,
+                                        cantidad: quantity,
+                                    })
+                                } else {
+                                    setModalVisible(true)
+                                }
+                            }}
                             // onPress={() => navigation.navigate('Cart')}
                             title="Agregar"
                         />
@@ -425,6 +447,12 @@ const FoodDetailsV1 = ({ route, navigation }) => {
                 {renderHeader()}
                 <ScrollView>{renderFoodDetails()}</ScrollView>
             </View>
+            <CustomModal
+                modalVisible={modalVisible}
+                setModalVisible={setModalVisible}
+                onPressGotIt={handlePressGotIt}
+                code="#1243CD2"
+            />
         </SafeAreaView>
     )
 }

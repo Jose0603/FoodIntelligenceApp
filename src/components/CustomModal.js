@@ -34,15 +34,16 @@ const CustomModal = ({ modalVisible, setModalVisible, onPressGotIt, code }) => {
                     >
                         <Text
                             style={{
-                                fontSize: 30,
-                                fontFamily: 'extraBold',
-                                marginTop: 30,
+                                ...FONTS.h2,
                                 color: COLORS.white,
+                                marginVertical: 68,
+                                marginHorizontal: 20,
                             }}
                         >
-                            Hurry Offers!
+                            Al cambiar de restaurante se perderán los productos
+                            de tu carrito de compras. ¿Deseas continuar?
                         </Text>
-                        <Text
+                        {/* <Text
                             style={{
                                 ...FONTS.h2,
                                 color: COLORS.white,
@@ -50,8 +51,8 @@ const CustomModal = ({ modalVisible, setModalVisible, onPressGotIt, code }) => {
                             }}
                         >
                             {code}
-                        </Text>
-                        <Text
+                        </Text> */}
+                        {/* <Text
                             style={{
                                 fontSize: 13,
                                 fontFamily: 'regular',
@@ -59,7 +60,7 @@ const CustomModal = ({ modalVisible, setModalVisible, onPressGotIt, code }) => {
                             }}
                         >
                             Use the coupon to get 25% discount
-                        </Text>
+                        </Text> */}
                         <TouchableOpacity
                             onPress={onPressGotIt} // Pass the onPressGotIt prop as the onPress event
                             style={{
@@ -76,7 +77,7 @@ const CustomModal = ({ modalVisible, setModalVisible, onPressGotIt, code }) => {
                             <Text
                                 style={{ ...FONTS.body3, color: COLORS.white }}
                             >
-                                GOT IT
+                                Continuar
                             </Text>
                         </TouchableOpacity>
                     </LinearGradient>

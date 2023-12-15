@@ -108,7 +108,7 @@ const DrawerNavigation = () => {
                 }}
                 component={MyOrders}
             />
-            <Drawer.Screen
+            {/* <Drawer.Screen
                 name="Search"
                 options={{
                     drawerLabel: 'Search',
@@ -138,7 +138,7 @@ const DrawerNavigation = () => {
                     ),
                 }}
                 component={Notifications}
-            />
+            /> */}
         </Drawer.Navigator>
     )
 }

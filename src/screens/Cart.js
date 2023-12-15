@@ -66,7 +66,7 @@ const Cart = ({ navigation }) => {
                                 color: COLORS.white,
                             }}
                         >
-                            Carrito
+                            Carrito de Compra de {pedidos.restauranteName}
                         </Text>
                     </View>
                     {/* <TouchableOpacity onPress={() => console.log('Edit Items')}>

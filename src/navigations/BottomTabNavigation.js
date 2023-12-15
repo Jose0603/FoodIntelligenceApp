@@ -95,7 +95,7 @@ const BottomTabNavigation = () => {
                 }}
             /> */}
 
-            <Tab.Screen
+            {/* <Tab.Screen
                 name="Notifications"
                 component={Notifications}
                 options={{
@@ -109,7 +109,7 @@ const BottomTabNavigation = () => {
                         )
                     },
                 }}
-            />
+            /> */}
 
             <Tab.Screen
                 name="Menu"
