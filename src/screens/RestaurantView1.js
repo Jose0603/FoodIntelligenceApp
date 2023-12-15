@@ -253,7 +253,7 @@ const RestaurantView1 = ({ route, navigation }) => {
                                 >
                                     L. {item.precio}
                                 </Text>
-                                <TouchableOpacity
+                                {/* <TouchableOpacity
                                     onPress={() => console.log('Add to cart')}
                                     style={{
                                         height: 30,
@@ -264,12 +264,12 @@ const RestaurantView1 = ({ route, navigation }) => {
                                         backgroundColor: COLORS.primary,
                                     }}
                                 >
-                                    <AntDesign
+                                     <AntDesign
                                         name="plus"
                                         size={12}
                                         color={COLORS.white}
-                                    />
-                                </TouchableOpacity>
+                                    /> 
+                                </TouchableOpacity> */}
                             </View>
                         </TouchableOpacity>
                     ))}

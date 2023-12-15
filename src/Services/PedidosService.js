@@ -14,3 +14,6 @@ export const getCurrentPedido = async () => {
 
     return data
 }
+export const deleteDetallePedido = async (id) => {
+    return await API.put(`/DetallesPedidos?id=${id}`)
+}

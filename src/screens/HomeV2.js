@@ -25,6 +25,8 @@ import { categories } from '../../data/categories'
 import { restaurants } from '../../data/restaurants'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useRestaurantes } from '../hooks/useRestaurantes'
+import { usePedido } from '../hooks/usePedido'
+import { ActivityIndicator } from 'react-native'
 // import CustomModal from '../components/CustomModal'
 import { useNavigation } from '@react-navigation/native'
 import { Formik } from 'formik'
@@ -33,7 +35,10 @@ import Input from '../components/Input'
 
 const HomeV2 = ({ navigation }) => {
     const [searchQuery, setSearchQuery] = useState('')
-    const [modalVisible, setModalVisible] = useState(true)
+    const { pedidos, isLoadingPedidoss } = usePedido()
+    const { restaurantes, isLoadingRestaurantes } = useRestaurantes()
+
+    // const [modalVisible, setModalVisible] = useState(true)
 
     const [fullName, setFullName] = useState(null)
     const getUserInfo = async () => {
@@ -53,11 +58,11 @@ const HomeV2 = ({ navigation }) => {
     useEffect(() => {
         getUserInfo()
     }, [])
-    const handlePressGotIt = () => {
-        // Handle the logic when the "GOT IT" button is pressed
-        // For example, you can close the modal or perform any other action
-        setModalVisible(false)
-    }
+    // const handlePressGotIt = () => {
+    //     // Handle the logic when the "GOT IT" button is pressed
+    //     // For example, you can close the modal or perform any other action
+    //     setModalVisible(false)
+    // }
 
     const handleSearch = (text) => {
         setSearchQuery(text)
@@ -215,7 +220,6 @@ const HomeV2 = ({ navigation }) => {
     }
 
     const renderRestaurants = () => {
-        const { restaurantes, isLoadingRestaurantes } = useRestaurantes()
         const navigation = useNavigation()
         return (
             <View style={{ height: 'auto' }}>
@@ -228,11 +232,11 @@ const HomeV2 = ({ navigation }) => {
                     }}
                 >
                     <Text style={{ ...FONTS.body2 }}>Restaurantes</Text>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                         onPress={() => console.log('')}
                         style={{ flexDirection: 'row', alignItems: 'center' }}
                     >
-                        {/* <Text style={{ fontSize: 16, fontFamily: 'regular' }}>
+                        <Text style={{ fontSize: 16, fontFamily: 'regular' }}>
                             See All
                         </Text>
                         <View>
@@ -241,8 +245,8 @@ const HomeV2 = ({ navigation }) => {
                                 size={24}
                                 color={COLORS.gray4}
                             />
-                        </View> */}
-                    </TouchableOpacity>
+                        </View> 
+                    </TouchableOpacity> */}
                 </View>
                 {!isLoadingRestaurantes &&
                     restaurantes != undefined &&
@@ -321,42 +325,43 @@ const HomeV2 = ({ navigation }) => {
     }
     return (
         <SafeAreaView style={styles.area}>
-            <View style={{ flex: 1, marginHorizontal: 16 }}>
-                <StatusBar hidden={true} />
-                <View
-                    style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        marginTop: 20,
-                    }}
-                >
+            {!isLoadingPedidoss && !isLoadingRestaurantes ? (
+                <View style={{ flex: 1, marginHorizontal: 16 }}>
+                    <StatusBar hidden={true} />
                     <View
                         style={{
                             flexDirection: 'row',
+                            justifyContent: 'space-between',
                             alignItems: 'center',
+                            marginTop: 20,
                         }}
                     >
-                        <TouchableOpacity
-                            onPress={() => navigation.openDrawer()}
+                        <View
                             style={{
-                                height: 45,
-                                width: 45,
-                                borderRadius: 22.5,
+                                flexDirection: 'row',
                                 alignItems: 'center',
-                                justifyContent: 'center',
-                                backgroundColor: COLORS.secondaryGray,
                             }}
                         >
-                            <Image
-                                source={icons.menu}
+                            <TouchableOpacity
+                                onPress={() => navigation.openDrawer()}
                                 style={{
-                                    height: 24,
-                                    width: 24,
+                                    height: 45,
+                                    width: 45,
+                                    borderRadius: 22.5,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    backgroundColor: COLORS.secondaryGray,
                                 }}
-                            />
-                        </TouchableOpacity>
-                        {/* <View
+                            >
+                                <Image
+                                    source={icons.menu}
+                                    style={{
+                                        height: 24,
+                                        width: 24,
+                                    }}
+                                />
+                            </TouchableOpacity>
+                            {/* <View
                             style={{
                                 flexDirection: 'column',
                                 marginLeft: 12,
@@ -395,71 +400,80 @@ const HomeV2 = ({ navigation }) => {
                                 />
                             </View>
                         </View> */}
+                        </View>
+                        <TouchableOpacity
+                            onPress={() => navigation.navigate('Cart')}
+                        >
+                            <View
+                                style={{
+                                    height: 45,
+                                    width: 45,
+                                    borderRadius: 22.5,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    backgroundColor: COLORS.tertiaryBlack,
+                                }}
+                            >
+                                <View>
+                                    <View
+                                        style={{
+                                            position: 'absolute',
+                                            top: -16,
+                                            left: 12,
+                                            backgroundColor: COLORS.primary,
+                                            height: 25,
+                                            width: 25,
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            borderRadius: 12.5,
+                                            zIndex: 999,
+                                        }}
+                                    >
+                                        <Text
+                                            style={{
+                                                fontSize: 16,
+                                                color: COLORS.white,
+                                            }}
+                                        >
+                                            {pedidos.cantidadTotal}
+                                        </Text>
+                                    </View>
+                                    <Feather
+                                        name="shopping-bag"
+                                        size={24}
+                                        color={COLORS.white}
+                                    />
+                                </View>
+                            </View>
+                        </TouchableOpacity>
                     </View>
 
                     <View
                         style={{
-                            height: 45,
-                            width: 45,
-                            borderRadius: 22.5,
+                            flexDirection: 'row',
                             alignItems: 'center',
-                            justifyContent: 'center',
-                            backgroundColor: COLORS.tertiaryBlack,
+                            marginVertical: 16,
                         }}
                     >
-                        <View>
-                            <View
-                                style={{
-                                    position: 'absolute',
-                                    top: -16,
-                                    left: 12,
-                                    backgroundColor: COLORS.primary,
-                                    height: 25,
-                                    width: 25,
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    borderRadius: 12.5,
-                                    zIndex: 999,
-                                }}
-                            >
-                                <Text
-                                    style={{
-                                        fontSize: 16,
-                                        color: COLORS.white,
-                                    }}
-                                >
-                                    2
-                                </Text>
-                            </View>
-                            <Feather
-                                name="shopping-bag"
-                                size={24}
-                                color={COLORS.white}
-                            />
-                        </View>
+                        <Text style={{ fontSize: 16, fontFamily: 'regular' }}>
+                            Hola {fullName},
+                        </Text>
+                        <Text style={{ fontSize: 16, fontFamily: 'bold' }}>
+                            Buen Provecho!
+                        </Text>
                     </View>
+                    <ScrollView>
+                        {renderSearchBar()}
+                        {/* {renderFoodCategories()} */}
+                        {renderRestaurants()}
+                    </ScrollView>
                 </View>
+            ) : (
+                <View>
+                    <ActivityIndicator size={'large'}></ActivityIndicator>
+                </View>
+            )}
 
-                <View
-                    style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        marginVertical: 16,
-                    }}
-                >
-                    <Text style={{ fontSize: 16, fontFamily: 'regular' }}>
-                        Hola {fullName},
-                    </Text>
-                    <Text style={{ fontSize: 16, fontFamily: 'bold' }}>
-                        Buen Provecho!
-                    </Text>
-                </View>
-                <ScrollView>
-                    {renderSearchBar()}
-                    {/* {renderFoodCategories()} */}
-                    {renderRestaurants()}
-                </ScrollView>
-            </View>
             {/* <CustomModal
                 modalVisible={modalVisible}
                 setModalVisible={setModalVisible}

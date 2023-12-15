@@ -10,10 +10,12 @@ import Button from '../components/Button'
 import { cartData } from '../../data/utils'
 import { StatusBar } from 'expo-status-bar'
 import { usePedido } from '../hooks/usePedido'
+import { ActivityIndicator } from 'react-native'
+import { deleteDetallePedido, addItem } from '../Services/PedidosService'
 
 const Cart = ({ navigation }) => {
     const [quantity, setQuantity] = useState(1)
-    const { comidas, isLoadingComidas } = usePedido()
+    const { pedidos, isLoadingPedidoss, refetchPedidos } = usePedido()
     const decreaseQuantity = () => {
         if (quantity > 1) {
             setQuantity(quantity - 1)
@@ -37,7 +39,10 @@ const Cart = ({ navigation }) => {
                     }}
                 >
                     <View
-                        style={{ flexDirection: 'row', alignItems: 'center' }}
+                        style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                        }}
                     >
                         <TouchableOpacity
                             onPress={() => navigation.goBack()}
@@ -79,7 +84,7 @@ const Cart = ({ navigation }) => {
                 </View>
 
                 <FlatList
-                    data={comidas.detallesPedido}
+                    data={pedidos.detallesPedido}
                     keyExtractor={(item) => item.id}
                     renderItem={({ item, index }) => {
                         return (
@@ -87,7 +92,12 @@ const Cart = ({ navigation }) => {
                                 key={index}
                                 style={cartStyles.cartItemContainer}
                             >
-                                <View style={{ marginRight: 2, width: 120 }}>
+                                <View
+                                    style={{
+                                        marginRight: 2,
+                                        width: 120,
+                                    }}
+                                >
                                     <Image
                                         src={`data:image/jpeg;base64,${item.idcomidaNavigationImagenComida}`}
                                         resizeMode="contain"
@@ -126,9 +136,14 @@ const Cart = ({ navigation }) => {
                                             {item.idcomidaNavigationNombre}
                                         </Text>
                                         <TouchableOpacity
-                                            onPress={() =>
-                                                console.log('Close cart items')
-                                            }
+                                            onPress={async () => {
+                                                const response =
+                                                    await deleteDetallePedido(
+                                                        item.id
+                                                    )
+                                                if (response.status == 200)
+                                                    refetchPedidos()
+                                            }}
                                             style={{
                                                 height: 26,
                                                 width: 26,
@@ -183,7 +198,18 @@ const Cart = ({ navigation }) => {
                                             }}
                                         >
                                             <TouchableOpacity
-                                                onPress={decreaseQuantity}
+                                                onPress={async () => {
+                                                    let cantidad = item.cantidad
+                                                    cantidad = cantidad - 1
+                                                    const response =
+                                                        await addItem({
+                                                            ...item,
+                                                            cantidad,
+                                                        })
+
+                                                    if (response.status == 200)
+                                                        refetchPedidos()
+                                                }}
                                                 style={cartStyles.roundedBtn}
                                             >
                                                 <Text style={cartStyles.body2}>
@@ -201,7 +227,18 @@ const Cart = ({ navigation }) => {
                                                 {item.cantidad}
                                             </Text>
                                             <TouchableOpacity
-                                                onPress={increaseQuantity}
+                                                onPress={async () => {
+                                                    let cantidad = item.cantidad
+                                                    cantidad = cantidad + 1
+                                                    const response =
+                                                        await addItem({
+                                                            ...item,
+                                                            cantidad,
+                                                        })
+
+                                                    if (response.status == 200)
+                                                        refetchPedidos()
+                                                }}
                                                 style={cartStyles.roundedBtn}
                                             >
                                                 <Text style={cartStyles.body2}>
@@ -246,7 +283,10 @@ const Cart = ({ navigation }) => {
                     }}
                 >
                     <View
-                        style={{ flexDirection: 'row', alignItems: 'center' }}
+                        style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                        }}
                     >
                         <Text style={cartStyles.body3}>Total:</Text>
                         <Text
@@ -257,7 +297,7 @@ const Cart = ({ navigation }) => {
                                 marginLeft: 12,
                             }}
                         >
-                            $90
+                            L. {pedidos.montoTotal}
                         </Text>
                     </View>
                     {/* <View
@@ -279,7 +319,7 @@ const Cart = ({ navigation }) => {
 
                 <Button
                     filled
-                    title="PLACE ORDER"
+                    title="Completar Orden"
                     onPress={() => navigation.navigate('PaymentMethod')}
                     style={{ marginVertical: 2 }}
                 />

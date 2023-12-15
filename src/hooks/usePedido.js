@@ -3,15 +3,30 @@ import { QueryKeys } from '../Helpers/QueryKeys'
 import { getCurrentPedido } from '../Services/PedidosService'
 
 export function usePedido() {
-    const { data, isLoading, error, isFetching } = useQuery(
-        [QueryKeys.COMIDAS],
+    const { data, isLoading, error, isFetching, refetch } = useQuery(
+        [QueryKeys.PEDIDO],
         () => getCurrentPedido()
     )
 
     return {
-        comidas: data?.result?.data ?? [],
-        isLoadingComidas: isLoading,
+        pedidos: data?.result?.data ?? [],
+        isLoadingPedidoss: isLoading,
         error,
-        isFetchingComidas: isFetching,
+        isFetchingPedidos: isFetching,
+        refetchPedidos: refetch,
+    }
+}
+export function useAllPedidos() {
+    const { data, isLoading, error, isFetching, refetch } = useQuery(
+        [QueryKeys.PEDIDOS],
+        () => getAllPedidos()
+    )
+
+    return {
+        allPedidos: data?.result?.data ?? [],
+        isLoadingAllPedidoss: isLoading,
+        error,
+        isFetchingAllPedidos: isFetching,
+        refetchAllPedidos: refetch,
     }
 }
