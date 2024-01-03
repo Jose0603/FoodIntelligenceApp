@@ -1,5 +1,12 @@
-import { View, Text, TouchableOpacity, Image, FlatList } from 'react-native'
-import React, { useState } from 'react'
+import {
+    Alert,
+    View,
+    Text,
+    TouchableOpacity,
+    Image,
+    FlatList,
+} from 'react-native'
+import React, { useState, useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { COLORS, SIZES, icons } from '../../constants'
 import * as Animatable from 'react-native-animatable'
@@ -11,19 +18,60 @@ import { cartData } from '../../data/utils'
 import { StatusBar } from 'expo-status-bar'
 import { usePedido } from '../hooks/usePedido'
 import { ActivityIndicator } from 'react-native'
-import { deleteDetallePedido, addItem } from '../Services/PedidosService'
+import {
+    deleteDetallePedido,
+    addItem,
+    updatePedido,
+} from '../Services/PedidosService'
+import DateTimePicker from '@react-native-community/datetimepicker'
 
 const Cart = ({ navigation }) => {
-    const [quantity, setQuantity] = useState(1)
+    const [error, setError] = useState()
     const { pedidos, isLoadingPedidoss, refetchPedidos } = usePedido()
-    const decreaseQuantity = () => {
-        if (quantity > 1) {
-            setQuantity(quantity - 1)
+    const initialDate = new Date()
+    initialDate.setHours(10, 0, 0, 0)
+    if (initialDate.getHours() < 10) {
+        initialDate.setHours(10, 0, 0, 0)
+    } else if (initialDate.getHours() >= 22) {
+        initialDate.setHours(22, 0, 0, 0)
+    }
+    const [date, setDate] = useState(initialDate)
+    const [show, setShow] = useState(false)
+    useEffect(() => {
+        if (error) {
+            Alert.alert('Ocurrio un error!', error)
+            setError(null)
+        }
+    }, [error])
+    const onChange = (event, selectedDate) => {
+        const currentDate = selectedDate || date
+        console.log(
+            '🚀 ~ file: Cart.js:48 ~ onChange ~ currentDate:',
+            currentDate
+        )
+        const finalDate = new Date(currentDate.getTime() - 6 * 60 * 60 * 1000)
+        console.log('🚀 ~ file: Cart.js:48 ~ onChange ~ finalDate1:', finalDate)
+        if (finalDate.getHours() < 10) {
+            setError('Reservaciones disponibles de 10am en adelante.')
+        } else if (finalDate.getHours() >= 22) {
+            setError('Reservaciones disponibles hasta las 10pm.')
+        } else {
+            console.log(
+                '🚀 ~ file: Cart.js:56 ~ onChange ~ finalDate:',
+                finalDate
+            )
+            setShow(false)
+            setDate(finalDate)
         }
     }
-
-    const increaseQuantity = () => {
-        setQuantity(quantity + 1)
+    const updateCurrentPedido = async () => {
+        await updatePedido({
+            id: pedidos.id,
+            fechaHoraPedido: date,
+            estadoPedido: 'Preparación',
+            rating: 0,
+        })
+        navigation.goBack()
     }
 
     return (
@@ -69,18 +117,6 @@ const Cart = ({ navigation }) => {
                             Carrito de Compra de {pedidos.restauranteName}
                         </Text>
                     </View>
-                    {/* <TouchableOpacity onPress={() => console.log('Edit Items')}>
-                        <Text
-                            style={{
-                                fontSize: 14,
-                                fontFamily: 'bold',
-                                textTransform: 'uppercase',
-                                color: COLORS.green,
-                            }}
-                        >
-                            Done
-                        </Text>
-                    </TouchableOpacity> */}
                 </View>
 
                 <FlatList
@@ -182,15 +218,6 @@ const Cart = ({ navigation }) => {
                                             justifyContent: 'space-between',
                                         }}
                                     >
-                                        {/* <Text
-                                            style={{
-                                                fontSize: 16,
-                                                color: COLORS.white,
-                                                fontFamily: 'regular',
-                                            }}
-                                        >
-                                            {item.size}"
-                                        </Text> */}
                                         <View
                                             style={{
                                                 flexDirection: 'row',
@@ -274,6 +301,30 @@ const Cart = ({ navigation }) => {
                     placeholderTextColor={COLORS.gray4}
                     editable={false}
                 /> */}
+                <TouchableOpacity onPress={() => setShow(true)}>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <Text style={cartStyles.body3}>Hora de entrega:</Text>
+                        <Text
+                            style={{
+                                fontSize: 24,
+                                fontFamily: 'bold',
+                                color: COLORS.black,
+                                marginLeft: 12,
+                            }}
+                        >
+                            {date.toLocaleTimeString([], {
+                                hour12: true,
+                                hour: 'numeric',
+                                minute: 'numeric',
+                            })}
+                        </Text>
+                    </View>
+                </TouchableOpacity>
 
                 <View
                     style={{
@@ -317,10 +368,19 @@ const Cart = ({ navigation }) => {
                     </View> */}
                 </View>
 
+                {show && (
+                    <DateTimePicker
+                        testID="dateTimePicker"
+                        value={date}
+                        mode={'time'}
+                        onChange={onChange}
+                    />
+                )}
+
                 <Button
                     filled
                     title="Completar Orden"
-                    onPress={() => navigation.navigate('PaymentMethod')}
+                    onPress={() => updateCurrentPedido()}
                     style={{ marginVertical: 2 }}
                 />
             </Animatable.View>

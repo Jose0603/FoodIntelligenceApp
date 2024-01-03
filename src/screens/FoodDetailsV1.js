@@ -22,7 +22,7 @@ const FoodDetailsV1 = ({ route, navigation }) => {
     const { comida } = route.params
     const [quantity, setQuantity] = useState(1)
     const [modalVisible, setModalVisible] = useState(false)
-    const { pedidos, refetchPedidos } = usePedido()
+    const { pedidos, refetchPedidos, isLoadingPedidoss } = usePedido()
     const renderHeader = () => {
         const navigation = useNavigation()
         return (
@@ -64,7 +64,7 @@ const FoodDetailsV1 = ({ route, navigation }) => {
         try {
             const response = await addItem(values)
             if (response.status == 200) {
-                refetchPedidos()
+                await refetchPedidos()
                 navigation.navigate('Cart')
             }
         } catch (error) {
@@ -422,7 +422,9 @@ const FoodDetailsV1 = ({ route, navigation }) => {
                             onPress={() => {
                                 if (
                                     pedidos.restauranteId ==
-                                    comida.idrestaurante
+                                        comida.idrestaurante ||
+                                    pedidos.restauranteId == undefined ||
+                                    pedidos.restauranteId == null
                                 ) {
                                     onAddItem({
                                         idComida: comida.id,
@@ -443,10 +445,17 @@ const FoodDetailsV1 = ({ route, navigation }) => {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
             <StatusBar hidden={true} />
-            <View style={{ flex: 1, paddingHorizontal: 16 }}>
-                {renderHeader()}
-                <ScrollView>{renderFoodDetails()}</ScrollView>
-            </View>
+            {!isLoadingPedidoss ? (
+                <View style={{ flex: 1, paddingHorizontal: 16 }}>
+                    {renderHeader()}
+                    <ScrollView>{renderFoodDetails()}</ScrollView>
+                </View>
+            ) : (
+                <View>
+                    <ActivityIndicator size={'large'}></ActivityIndicator>
+                </View>
+            )}
+
             <CustomModal
                 modalVisible={modalVisible}
                 setModalVisible={setModalVisible}
