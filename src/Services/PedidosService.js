@@ -17,6 +17,9 @@ export const getCurrentPedido = async () => {
 export const updatePedido = async (values) => {
     return await API.put(`/Pedidos`, values)
 }
+export const updateRatingPedido = async (values) => {
+    return await API.put(`/Pedidos/UpdateRating`, values)
+}
 export const getAllPedidos = async () => {
     const { data } = await API.get(`/Pedidos`)
 

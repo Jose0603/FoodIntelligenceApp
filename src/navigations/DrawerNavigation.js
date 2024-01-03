@@ -96,7 +96,7 @@ const DrawerNavigation = () => {
             <Drawer.Screen
                 name="Orders"
                 options={{
-                    drawerLabel: 'Orders',
+                    drawerLabel: 'Ordenes',
                     title: 'Orders',
                     drawerIcon: () => (
                         <Ionicons

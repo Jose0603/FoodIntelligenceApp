@@ -36,6 +36,8 @@ const Cart = ({ navigation }) => {
         initialDate.setHours(22, 0, 0, 0)
     }
     const [date, setDate] = useState(initialDate)
+    const [showDate, setShowDate] = useState(initialDate)
+
     const [show, setShow] = useState(false)
     useEffect(() => {
         if (error) {
@@ -45,23 +47,16 @@ const Cart = ({ navigation }) => {
     }, [error])
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date
-        console.log(
-            '🚀 ~ file: Cart.js:48 ~ onChange ~ currentDate:',
-            currentDate
-        )
+
         const finalDate = new Date(currentDate.getTime() - 6 * 60 * 60 * 1000)
-        console.log('🚀 ~ file: Cart.js:48 ~ onChange ~ finalDate1:', finalDate)
         if (finalDate.getHours() < 10) {
             setError('Reservaciones disponibles de 10am en adelante.')
         } else if (finalDate.getHours() >= 22) {
             setError('Reservaciones disponibles hasta las 10pm.')
         } else {
-            console.log(
-                '🚀 ~ file: Cart.js:56 ~ onChange ~ finalDate:',
-                finalDate
-            )
             setShow(false)
             setDate(finalDate)
+            setShowDate(selectedDate)
         }
     }
     const updateCurrentPedido = async () => {
@@ -317,7 +312,7 @@ const Cart = ({ navigation }) => {
                                 marginLeft: 12,
                             }}
                         >
-                            {date.toLocaleTimeString([], {
+                            {showDate.toLocaleTimeString([], {
                                 hour12: true,
                                 hour: 'numeric',
                                 minute: 'numeric',

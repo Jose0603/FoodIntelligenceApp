@@ -122,7 +122,7 @@ const EditProfile = () => {
                             fontFamily: 'regular',
                         }}
                     >
-                        Edit Profile
+                        Editar Perfil
                     </Text>
                 </View>
             </View>
@@ -223,7 +223,7 @@ const EditProfile = () => {
                                     keyboardType="email-address"
                                 />
                                 <Text style={commonStyles.inputHeader}>
-                                    Phone Number
+                                    Numero de Telefono
                                 </Text>
                                 <Input
                                     value={values.phoneNumber}

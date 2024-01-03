@@ -1,23 +1,27 @@
 import {
-    View,
     Text,
     TouchableOpacity,
     Image,
     useWindowDimensions,
+    View,
+    Modal,
+    StyleSheet,
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { COLORS, icons } from '../../constants'
-import { useNavigation } from '@react-navigation/native'
+import { COLORS, FONTS, SIZES, images, icons } from '../../constants'
+import { Ionicons } from '@expo/vector-icons'
 import { commonStyles } from '../styles/CommonStyles'
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view'
 import { FlatList } from 'react-native'
-import { history, orders } from '../../data/utils'
 import { StatusBar } from 'expo-status-bar'
 import { useAllPedidos } from '../hooks/usePedido'
+import Button from '../components/Button'
+import { updateRatingPedido } from '../Services/PedidosService'
+import { Octicons, AntDesign } from '@expo/vector-icons'
 
 const OngoingRoute = () => {
-    const { allPedidos, isLoadingAllPedidoss } = useAllPedidos()
+    const { allPedidos } = useAllPedidos()
     const ongoingOrders = allPedidos.filter(
         (order) => order.estadoPedido === 'Preparación'
     )
@@ -88,10 +92,37 @@ const OngoingRoute = () => {
                                             style={{
                                                 fontSize: 12,
                                                 fontFamily: 'regular',
+                                                marginHorizontal: 2,
                                             }}
                                         >
                                             {' '}
-                                            | {item.cantidadTotal} Artículos
+                                            |{' '}
+                                            {new Date(
+                                                item.fechaHoraPedido
+                                            ).toLocaleString('en-US', {
+                                                year: 'numeric',
+                                                month: '2-digit',
+                                                day: '2-digit',
+                                                hour: 'numeric',
+                                                minute: 'numeric',
+                                                hour12: true,
+                                            })}
+                                        </Text>
+                                    </View>
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            marginTop: 4,
+                                        }}
+                                    >
+                                        <Text
+                                            style={{
+                                                fontSize: 12,
+                                                fontFamily: 'regular',
+                                            }}
+                                        >
+                                            {item.cantidadTotal} Artículos
                                         </Text>
                                     </View>
                                 </View>
@@ -165,10 +196,181 @@ const OngoingRoute = () => {
 }
 
 const HistoryRoute = () => {
-    const { allPedidos, isLoadingAllPedidoss } = useAllPedidos()
+    const { allPedidos, isLoadingAllPedidoss, refetchAllPedidos } =
+        useAllPedidos()
     const restOrder = allPedidos.filter(
         (order) => order.estadoPedido != 'Preparación'
     )
+    const [modalVisible, setModalVisible] = useState(false)
+    const [pedidoId, setPedidoId] = useState(0)
+
+    const renderSearchModal = () => {
+        const [isStarSelected, setIsStarSelected] = useState(0)
+        const updateCurrentPedido = async () => {
+            await updateRatingPedido({
+                id: pedidoId,
+                rating: isStarSelected,
+            })
+            refetchAllPedidos()
+        }
+        return (
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+            >
+                <TouchableOpacity
+                    onPressOut={() => setModalVisible(false)}
+                    activeOpacity={0.1}
+                    style={{
+                        flex: 1,
+                        backgroundColor: 'rgba(0, 0, 0, 0.2)',
+                        height: SIZES.height,
+                        width: SIZES.width,
+                    }}
+                >
+                    <View
+                        style={{
+                            flex: 1,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}
+                    >
+                        <View
+                            style={{
+                                height: 'auto',
+                                width: SIZES.width * 0.9,
+                                borderRadius: 12,
+                                backgroundColor: COLORS.white,
+                                paddingHorizontal: 12,
+                            }}
+                        >
+                            <View
+                                style={{
+                                    width: '100%',
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    paddingVertical: 12,
+                                }}
+                            >
+                                <Text
+                                    style={{ fontSize: 17, fontFamily: 'bold' }}
+                                >
+                                    Calificanos
+                                </Text>
+                                <TouchableOpacity
+                                    onPress={() => setModalVisible(false)}
+                                    style={commonStyles.header3Icon}
+                                >
+                                    <Image
+                                        source={icons.close}
+                                        style={{
+                                            height: 24,
+                                            width: 24,
+                                            tintColor: COLORS.black,
+                                        }}
+                                    />
+                                </TouchableOpacity>
+                            </View>
+
+                            <View>
+                                <View
+                                    style={{
+                                        flexDirection: 'row',
+                                        marginVertical: 13,
+                                    }}
+                                >
+                                    <TouchableOpacity
+                                        style={styles.starContainer}
+                                        onPress={() => setIsStarSelected(1)}
+                                    >
+                                        <Ionicons
+                                            name="md-star-sharp"
+                                            size={24}
+                                            color={
+                                                isStarSelected >= 1
+                                                    ? COLORS.primary
+                                                    : COLORS.gray
+                                            }
+                                        />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                        style={styles.starContainer}
+                                        onPress={() => setIsStarSelected(2)}
+                                    >
+                                        <Ionicons
+                                            name="md-star-sharp"
+                                            size={24}
+                                            color={
+                                                isStarSelected >= 2
+                                                    ? COLORS.primary
+                                                    : COLORS.gray
+                                            }
+                                        />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                        style={styles.starContainer}
+                                        onPress={() => setIsStarSelected(3)}
+                                    >
+                                        <Ionicons
+                                            name="md-star-sharp"
+                                            size={24}
+                                            color={
+                                                isStarSelected >= 3
+                                                    ? COLORS.primary
+                                                    : COLORS.gray
+                                            }
+                                        />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                        style={styles.starContainer}
+                                        onPress={() => setIsStarSelected(4)}
+                                    >
+                                        <Ionicons
+                                            name="md-star-sharp"
+                                            size={24}
+                                            color={
+                                                isStarSelected >= 4
+                                                    ? COLORS.primary
+                                                    : COLORS.gray
+                                            }
+                                        />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                        style={styles.starContainer}
+                                        onPress={() => setIsStarSelected(5)}
+                                    >
+                                        <Ionicons
+                                            name="md-star-sharp"
+                                            size={24}
+                                            color={
+                                                isStarSelected >= 5
+                                                    ? COLORS.primary
+                                                    : COLORS.gray
+                                            }
+                                        />
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+
+                            <Button
+                                title="Calificar"
+                                filled
+                                onPress={() => {
+                                    updateCurrentPedido()
+                                    setModalVisible(false)
+                                }}
+                                style={{
+                                    marginBottom: 12,
+                                }}
+                            />
+                        </View>
+                    </View>
+                </TouchableOpacity>
+            </Modal>
+        )
+    }
     return (
         <View style={{ flex: 1 }}>
             <FlatList
@@ -256,17 +458,57 @@ const HistoryRoute = () => {
                                             }}
                                         >
                                             {' '}
-                                            | {item.fechaHoraPedido}
+                                            |{' '}
+                                            {new Date(
+                                                item.fechaHoraPedido
+                                            ).toLocaleString('en-US', {
+                                                year: 'numeric',
+                                                month: '2-digit',
+                                                day: '2-digit',
+                                                hour: 'numeric',
+                                                minute: 'numeric',
+                                                hour12: true,
+                                            })}
                                         </Text>
+                                    </View>
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            marginTop: 4,
+                                        }}
+                                    >
                                         <Text
                                             style={{
                                                 fontSize: 12,
                                                 fontFamily: 'regular',
                                             }}
                                         >
-                                            {' '}
-                                            | {item.cantidadTotal} Artículos
+                                            {item.cantidadTotal} Artículos
                                         </Text>
+                                    </View>
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            marginTop: 4,
+                                        }}
+                                    >
+                                        <View
+                                            style={{
+                                                flexDirection: 'row',
+                                                alignItems: 'center',
+                                            }}
+                                        >
+                                            <Octicons
+                                                name="star"
+                                                size={24}
+                                                color={COLORS.primary}
+                                            />
+                                            <Text style={{ marginLeft: 8 }}>
+                                                {item.rating}
+                                            </Text>
+                                        </View>
                                     </View>
                                 </View>
                             </View>
@@ -288,30 +530,35 @@ const HistoryRoute = () => {
                                 marginVertical: 18,
                             }}
                         >
-                            {item.estadoPedido != 'Cancelado' && (
-                                <TouchableOpacity
-                                    style={{
-                                        height: 38,
-                                        width: 140,
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        backgroundColor: COLORS.white,
-                                        borderColor: COLORS.primary,
-                                        borderWidth: 1,
-                                        borderRadius: 8,
-                                    }}
-                                >
-                                    <Text
+                            {item.estadoPedido != 'Cancelado' &&
+                                item.isRated != true && (
+                                    <TouchableOpacity
                                         style={{
-                                            color: COLORS.primary,
-                                            fontSize: 14,
-                                            fontFamily: 'regular',
+                                            height: 38,
+                                            width: 140,
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            backgroundColor: COLORS.white,
+                                            borderColor: COLORS.primary,
+                                            borderWidth: 1,
+                                            borderRadius: 8,
+                                        }}
+                                        onPressOut={() => {
+                                            setModalVisible(true)
+                                            setPedidoId(item.id)
                                         }}
                                     >
-                                        Calificanos
-                                    </Text>
-                                </TouchableOpacity>
-                            )}
+                                        <Text
+                                            style={{
+                                                color: COLORS.primary,
+                                                fontSize: 14,
+                                                fontFamily: 'regular',
+                                            }}
+                                        >
+                                            Calificanos
+                                        </Text>
+                                    </TouchableOpacity>
+                                )}
                             <TouchableOpacity
                                 style={{
                                     height: 38,
@@ -336,6 +583,7 @@ const HistoryRoute = () => {
                     </View>
                 )}
             />
+            {renderSearchModal()}
         </View>
     )
 }
@@ -351,8 +599,8 @@ const MyOrders = ({ navigation }) => {
     const [index, setIndex] = React.useState(0)
 
     const [routes] = React.useState([
-        { key: 'first', title: 'Ongoing' },
-        { key: 'second', title: 'History' },
+        { key: 'first', title: 'En Preparación' },
+        { key: 'second', title: 'Historial' },
     ])
 
     const renderTabBar = (props) => (
@@ -371,8 +619,8 @@ const MyOrders = ({ navigation }) => {
             )}
         />
     )
+
     const renderHeader = () => {
-        const navigation = useNavigation()
         return (
             <View
                 style={{
@@ -405,7 +653,7 @@ const MyOrders = ({ navigation }) => {
                             fontFamily: 'regular',
                         }}
                     >
-                        My Orders
+                        Mis Ordenes
                     </Text>
                 </View>
                 {/* <TouchableOpacity
@@ -448,5 +696,46 @@ const MyOrders = ({ navigation }) => {
         </SafeAreaView>
     )
 }
-
+const styles = StyleSheet.create({
+    checkboxContainer: {
+        paddingHorizontal: 8,
+        paddingVertical: 8,
+        borderRadius: 30,
+        borderWidth: 1,
+        borderColor: COLORS.gray6,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginRight: 12,
+        marginBottom: 12,
+    },
+    roundedCheckBoxContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 48,
+        width: 48,
+        borderRadius: 22,
+        borderWidth: 1,
+        borderColor: COLORS.gray,
+        backgroundColor: COLORS.gray,
+        marginRight: 12,
+    },
+    selectedCheckbox: {
+        backgroundColor: COLORS.primary,
+    },
+    checkboxText: {
+        color: COLORS.white,
+        fontSize: 16,
+        fontFamily: 'regular',
+    },
+    starContainer: {
+        height: 48,
+        width: 48,
+        borderRadius: 24,
+        borderWidth: 1,
+        borderColor: COLORS.secondaryGray,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginRight: 6,
+    },
+})
 export default MyOrders

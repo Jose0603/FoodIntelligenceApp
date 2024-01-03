@@ -43,7 +43,7 @@ const PersonalProfile = () => {
                             fontFamily: 'regular',
                         }}
                     >
-                        Personal Profile
+                        Perfil Personal
                     </Text>
                 </View>
                 <TouchableOpacity
@@ -57,7 +57,7 @@ const PersonalProfile = () => {
                             fontFamily: 'bold',
                         }}
                     >
-                        Edit
+                        Editar
                     </Text>
                 </TouchableOpacity>
             </View>
@@ -154,7 +154,9 @@ const PersonalProfile = () => {
                                 />
                             </View>
                             <View style={{ flexDirection: 'column' }}>
-                                <Text style={styles.boldBody}>Full Name</Text>
+                                <Text style={styles.boldBody}>
+                                    Nombre Completo
+                                </Text>
                                 <Text style={styles.textBody}>
                                     {userFirstName}
                                 </Text>
@@ -187,7 +189,7 @@ const PersonalProfile = () => {
                             </View>
                             <View style={{ flexDirection: 'column' }}>
                                 <Text style={styles.boldBody}>
-                                    Phone Number
+                                    Numero de Telefono
                                 </Text>
                                 <Text style={styles.textBody}>
                                     {phoneNumber}

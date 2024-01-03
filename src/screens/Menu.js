@@ -46,7 +46,7 @@ const Menu = () => {
                             fontFamily: 'regular',
                         }}
                     >
-                        Profile
+                        Perfil
                     </Text>
                 </View>
                 <TouchableOpacity
@@ -138,7 +138,9 @@ const Menu = () => {
                                     color={COLORS.primary}
                                 />
                             </View>
-                            <Text style={styles.textBody}>Personal Info</Text>
+                            <Text style={styles.textBody}>
+                                Información Personal
+                            </Text>
                         </View>
                         <View>
                             <Image
@@ -179,7 +181,7 @@ const Menu = () => {
                                     color="#369BFF"
                                 />
                             </View>
-                            <Text style={styles.textBody}>Cart</Text>
+                            <Text style={styles.textBody}>Carrito</Text>
                         </View>
                         <View>
                             <Image
@@ -332,7 +334,7 @@ const Menu = () => {
                                     color="#FB4A59"
                                 />
                             </View>
-                            <Text style={styles.textBody}>Logout</Text>
+                            <Text style={styles.textBody}>Cerrar Sesión</Text>
                         </View>
                         <View>
                             <Image

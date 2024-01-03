@@ -46,7 +46,7 @@ const Address = ({ navigation }) => {
                             fontFamily: 'regular',
                         }}
                     >
-                        Edit Profile
+                        Editar Perfil
                     </Text>
                 </View>
             </View>
