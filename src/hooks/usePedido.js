@@ -1,6 +1,10 @@
 import { useQuery } from 'react-query'
 import { QueryKeys } from '../Helpers/QueryKeys'
-import { getCurrentPedido, getAllPedidos } from '../Services/PedidosService'
+import {
+    getCurrentPedido,
+    getAllPedidos,
+    getPedidoWithId,
+} from '../Services/PedidosService'
 
 export function usePedido() {
     const { data, isLoading, error, isFetching, refetch } = useQuery(
@@ -14,6 +18,20 @@ export function usePedido() {
         error,
         isFetchingPedidos: isFetching,
         refetchPedidos: refetch,
+    }
+}
+export function usePedidoWithId(id) {
+    const { data, isLoading, error, isFetching, refetch } = useQuery(
+        [QueryKeys.PEDIDO, id],
+        () => getPedidoWithId(id)
+    )
+
+    return {
+        pedidoSelected: data?.result?.data ?? [],
+        isLoadingPedidoSelected: isLoading,
+        error,
+        isFetchingPedidoSelected: isFetching,
+        refetchPedidoSelected: refetch,
     }
 }
 export function useAllPedidos() {

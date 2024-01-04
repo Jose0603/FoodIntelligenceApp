@@ -18,6 +18,7 @@ import {
     RestaurantView1,
     FoodByKeywords,
     Cart,
+    OrderDetail,
     EditCart,
     PaymentMethod,
     PaymentMethodNoCard,
@@ -190,6 +191,13 @@ const AppNavigation = () => {
                 <Stack.Screen
                     name="Cart"
                     component={Cart}
+                    options={{
+                        headerShown: false,
+                    }}
+                />
+                <Stack.Screen
+                    name="OrderDetail"
+                    component={OrderDetail}
                     options={{
                         headerShown: false,
                     }}

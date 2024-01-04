@@ -17,6 +17,7 @@ import Search from './Search'
 import Notifications from './Notifications'
 import FoodByKeywords from './FoodByKeywords'
 import Cart from './Cart'
+import OrderDetail from './OrderDetail'
 import EditCart from './EditCart'
 import PaymentMethod from './PaymentMethod'
 import PaymentMethodNoCard from './PaymentMethodNoCard'
@@ -53,6 +54,7 @@ export {
     Notifications,
     FoodByKeywords,
     Cart,
+    OrderDetail,
     EditCart,
     PaymentMethod,
     PaymentMethodNoCard,

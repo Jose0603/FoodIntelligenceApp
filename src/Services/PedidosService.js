@@ -14,6 +14,10 @@ export const getCurrentPedido = async () => {
 
     return data
 }
+export const getPedidoWithId = async (id) => {
+    const { data } = await API.get(`/Pedidos/GetPedidoId?pedidoId=${id}`)
+    return data
+}
 export const updatePedido = async (values) => {
     return await API.put(`/Pedidos`, values)
 }

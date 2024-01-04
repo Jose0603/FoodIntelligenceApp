@@ -20,7 +20,7 @@ import Button from '../components/Button'
 import { updateRatingPedido } from '../Services/PedidosService'
 import { Octicons, AntDesign } from '@expo/vector-icons'
 
-const OngoingRoute = () => {
+const OngoingRoute = ({ navigation }) => {
     const { allPedidos } = useAllPedidos()
     const ongoingOrders = allPedidos.filter(
         (order) => order.estadoPedido === 'Preparación'
@@ -154,6 +154,11 @@ const OngoingRoute = () => {
                                     backgroundColor: COLORS.primary,
                                     borderRadius: 8,
                                 }}
+                                onPressOut={() => {
+                                    navigation.navigate('OrderDetail', {
+                                        findPedidoId: item.id,
+                                    })
+                                }}
                             >
                                 <Text
                                     style={{
@@ -195,7 +200,7 @@ const OngoingRoute = () => {
     )
 }
 
-const HistoryRoute = () => {
+const HistoryRoute = ({ navigation }) => {
     const { allPedidos, isLoadingAllPedidoss, refetchAllPedidos } =
         useAllPedidos()
     const restOrder = allPedidos.filter(
@@ -568,6 +573,11 @@ const HistoryRoute = () => {
                                     backgroundColor: COLORS.primary,
                                     borderRadius: 8,
                                 }}
+                                onPressOut={() =>
+                                    navigation.navigate('OrderDetail', {
+                                        findPedidoId: item.id,
+                                    })
+                                }
                             >
                                 <Text
                                     style={{
@@ -576,7 +586,7 @@ const HistoryRoute = () => {
                                         fontFamily: 'regular',
                                     }}
                                 >
-                                    Detalles
+                                    Ver Detalles
                                 </Text>
                             </TouchableOpacity>
                         </View>
@@ -656,20 +666,6 @@ const MyOrders = ({ navigation }) => {
                         Mis Ordenes
                     </Text>
                 </View>
-                {/* <TouchableOpacity
-                    onPress={() => console.log('Pressed')}
-                    style={commonStyles.header1Icon}
-                >
-                    <Image
-                        resizeMode="contain"
-                        source={icons.more}
-                        style={{
-                            height: 24,
-                            width: 24,
-                            tintColor: COLORS.black,
-                        }}
-                    />
-                </TouchableOpacity> */}
             </View>
         )
     }
@@ -686,7 +682,14 @@ const MyOrders = ({ navigation }) => {
                 >
                     <TabView
                         navigationState={{ index, routes }}
-                        renderScene={renderScene}
+                        renderScene={SceneMap({
+                            first: () => (
+                                <OngoingRoute navigation={navigation} />
+                            ),
+                            second: () => (
+                                <HistoryRoute navigation={navigation} />
+                            ),
+                        })}
                         onIndexChange={setIndex}
                         initialLayout={{ width: layout.width }}
                         renderTabBar={renderTabBar}
